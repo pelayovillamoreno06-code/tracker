@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RPG Hábitos">
+<meta name="theme-color" content="#060606">
+<title>RPG Hábitos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;900&display=swap');
+
+:root{
+  --purple:#7b2ff7;
+  --purple-light:#b84dff;
+  --purple-glow:rgba(123,47,247,0.35);
+  --card-bg:rgba(20,20,28,0.92);
+  --text-muted:#c9c1dd;
+  --accent:#cdb8ff;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+html,body{
+  overscroll-behavior:none;
+  -webkit-overflow-scrolling:touch;
+}
+
+body{
+  background:
+    radial-gradient(circle at top left,#4b1d74 0%,transparent 30%),
+    radial-gradient(circle at bottom right,#2d1450 0%,transparent 35%),
+    #060606;
+  color:white;
+  min-height:100vh;
+  min-height:-webkit-fill-available;
+  padding:env(safe-area-inset-top,20px) env(safe-area-inset-right,16px) env(safe-area-inset-bottom,30px) env(safe-area-inset-left,16px);
+  padding-top:max(env(safe-area-inset-top),20px);
+  padding-bottom:max(env(safe-area-inset-bottom),30px);
+  overflow-x:hidden;
+  font-family:'Nunito',sans-serif;
+}
+
+.px{font-family:'Press Start 2P',monospace;}
+
+.card{
+  background:var(--card-bg);
+  border:1px solid rgba(163,96,255,0.25);
+  border-radius:28px;
+  padding:1.4rem;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-shadow:0 0 0 1px rgba(163,96,255,0.08),0 12px 40px rgba(115,55,210,0.28);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+
+.btn{
+  cursor:pointer;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--purple),var(--purple-light));
+  font-family:'Nunito',sans-serif;
+  font-size:15px;
+  font-weight:800;
+  color:white;
+  padding:14px 22px;
+  transition:all .18s ease;
+  box-shadow:0 8px 24px var(--purple-glow);
+  -webkit-appearance:none;
+  appearance:none;
+  min-height:48px;
+  touch-action:manipulation;
+}
+.btn:active{transform:scale(.96);}
+
+.hbtn{
+  border-radius:20px;
+  padding:16px 18px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border:1px solid rgba(255,255,255,0.08);
+  transition:all .18s ease;
+  font-family:'Nunito',sans-serif;
+  font-size:15px;
+  font-weight:800;
+  background:rgba(255,255,255,0.03);
+  color:white;
+  min-height:72px;
+  width:100%;
+  -webkit-appearance:none;
+  appearance:none;
+  touch-action:manipulation;
+}
+.hbtn:active{transform:scale(0.97);}
+
+.xp-bar-wrap{
+  background:#1a1324;
+  border-radius:999px;
+  height:16px;
+  overflow:hidden;
+  width:100%;
+  border:1px solid rgba(255,255,255,0.06);
+}
+.xp-fill{
+  height:100%;
+  border-radius:999px;
+  transition:width 0.45s ease;
+  background:linear-gradient(90deg,#7F77DD,#CB6CFF);
+}
+
+.toast{
+  position:fixed;
+  top:max(env(safe-area-inset-top),20px);
+  left:50%;
+  transform:translateX(-50%);
+  background:#17111f;
+  border:1px solid rgba(203,108,255,0.4);
+  border-radius:999px;
+  padding:12px 22px;
+  font-size:13px;
+  font-family:'Nunito',sans-serif;
+  font-weight:800;
+  color:white;
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 0.3s;
+  z-index:100;
+}
+.toast.show{opacity:1;}
+
+.stat-box{
+  background:rgba(255,255,255,0.04);
+  border-radius:20px;
+  padding:14px 10px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+.hero-wrap{
+  background:radial-gradient(circle,#2f1745 0%,#130d1d 70%);
+  border-radius:24px;
+  padding:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.main-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);
+  gap:16px;
+  margin-bottom:16px;
+}
+
+@media(max-width:600px){
+  .main-grid{grid-template-columns:1fr;}
+  body{padding-left:12px;padding-right:12px;}
+}
+
+canvas{image-rendering:pixelated;image-rendering:crisp-edges;}
+
+.level-badge{
+  font-size:11px;
+  font-weight:700;
+  padding:7px 14px;
+  border-radius:999px;
+  font-family:'Press Start 2P',monospace;
+  letter-spacing:0.5px;
+}
+
+.chart-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:12px;
+  font-size:12px;
+  color:var(--text-muted);
+}
+.legend-dot{
+  width:10px;height:10px;
+  border-radius:2px;
+  display:inline-block;
+  margin-right:4px;
+  vertical-align:middle;
+}
+
+.section-title{
+  font-size:8px;
+  color:var(--accent);
+  margin-bottom:10px;
+  letter-spacing:1px;
+}
+
+.msg-box{
+  font-size:13px;
+  color:var(--text-muted);
+  line-height:1.6;
+  padding:10px 0 0;
+}
+
+.reset-btn{
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.35);
+  font-size:12px;
+  padding:10px 20px;
+  border-radius:999px;
+  cursor:pointer;
+  font-family:'Nunito',sans-serif;
+  touch-action:manipulation;
+  min-height:44px;
+}
+.reset-btn:active{opacity:0.7;}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="main-grid">
+
+  <!-- COLUMNA PERSONAJE -->
+  <div class="card" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+
+    <div class="px section-title" id="levelLabel">nivel 1</div>
+
+    <span class="level-badge" id="heroBadge"></span>
+
+    <div class="hero-wrap">
+      <canvas id="heroCanvas" width="120" height="150" style="width:120px;height:150px;"></canvas>
+    </div>
+
+    <div style="width:100%">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+        <span style="font-size:12px;color:var(--text-muted)">XP</span>
+        <span style="font-size:12px;color:var(--text-muted)" id="xpLabel">0 / 40</span>
+      </div>
+      <div class="xp-bar-wrap"><div class="xp-fill" id="xpBar" style="width:0%"></div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;">
+      <div class="stat-box"><div class="px" style="font-size:10px;" id="statStr">FUE 5</div><div style="font-size:11px;color:var(--text-muted);margin-top:5px;">fuerza</div></div>
+      <div class="stat-box"><div class="px" style="font-size:10px;" id="statInt">INT 5</div><div style="font-size:11px;color:var(--text-muted);margin-top:5px;">mente</div></div>
+      <div class="stat-box"><div class="px" style="font-size:10px;" id="statFoc">FOC 5</div><div style="font-size:11px;color:var(--text-muted);margin-top:5px;">foco</div></div>
+      <div class="stat-box"><div class="px" style="font-size:10px;" id="statDis">DIS 5</div><div style="font-size:11px;color:var(--text-muted);margin-top:5px;">disciplina</div></div>
+    </div>
+
+  </div>
+
+  <!-- COLUMNA HÁBITOS -->
+  <div class="card" style="display:flex;flex-direction:column;gap:10px;">
+
+    <div class="px section-title">día <span id="dayNum">1</span> — hábitos</div>
+
+    <button class="hbtn" id="hb0" onclick="toggleHabit(0)">
+      <span style="font-size:26px;">🏋️</span>
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
+        <span>gimnasio</span>
+        <span style="font-size:11px;color:var(--text-muted);font-weight:400;">+8 XP / -3 si no</span>
+      </div>
+      <span style="margin-left:auto;font-size:13px;min-width:36px;text-align:right;" id="hcheck0">+8</span>
+    </button>
+
+    <button class="hbtn" id="hb1" onclick="toggleHabit(1)">
+      <span style="font-size:26px;">📚</span>
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
+        <span>estudiar +3h</span>
+        <span style="font-size:11px;color:var(--text-muted);font-weight:400;">+10 XP / -3 si no</span>
+      </div>
+      <span style="margin-left:auto;font-size:13px;min-width:36px;text-align:right;" id="hcheck1">+10</span>
+    </button>
+
+    <button class="hbtn" id="hb2" onclick="toggleHabit(2)">
+      <span style="font-size:26px;">📵</span>
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
+        <span>móvil -1h</span>
+        <span style="font-size:11px;color:var(--text-muted);font-weight:400;">+6 XP / -3 si no</span>
+      </div>
+      <span style="margin-left:auto;font-size:13px;min-width:36px;text-align:right;" id="hcheck2">+6</span>
+    </button>
+
+    <button class="hbtn" id="hb3" onclick="toggleHabit(3)">
+      <span style="font-size:26px;">🧠</span>
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
+        <span>deep work 1h30</span>
+        <span style="font-size:11px;color:var(--text-muted);font-weight:400;">+8 XP / -3 si no</span>
+      </div>
+      <span style="margin-left:auto;font-size:13px;min-width:36px;text-align:right;" id="hcheck3">+8</span>
+    </button>
+
+    <button class="hbtn" id="hb4" onclick="toggleHabit(4)" style="border-color:rgba(80,220,120,0.3);">
+      <span style="font-size:26px;">🚫</span>
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
+        <span>no touch</span>
+        <span style="font-size:11px;color:rgba(80,220,120,0.7);font-weight:400;">+2 XP — sin penalización</span>
+      </div>
+      <span style="margin-left:auto;font-size:13px;min-width:36px;text-align:right;" id="hcheck4">+2</span>
+    </button>
+
+    <div style="display:flex;gap:10px;align-items:center;padding-top:6px;border-top:1px solid rgba(255,255,255,0.07);">
+      <div style="font-size:14px;color:var(--text-muted);">
+        Neto hoy: <b id="todayXP" style="color:white;">0</b> XP
+      </div>
+      <button class="btn" style="margin-left:auto;" onclick="commitDay()">Cerrar día →</button>
+    </div>
+
+    <div class="msg-box" id="msgBox">Marca los hábitos completados y cierra el día.</div>
+
+  </div>
+</div>
+
+<!-- GRÁFICA -->
+<div class="card" style="margin-bottom:16px;">
+  <div class="px section-title">progresión — 30 días</div>
+  <div class="chart-legend">
+    <span><span class="legend-dot" style="background:#9b77ff;"></span>XP acumulado</span>
+    <span><span class="legend-dot" style="background:#50dc78;"></span>nivel</span>
+    <span><span class="legend-dot" style="background:rgba(255,90,90,0.7);"></span>días negativos</span>
+  </div>
+  <div style="position:relative;width:100%;height:220px;">
+    <canvas id="progressChart" role="img" aria-label="Gráfica de XP acumulado y nivel por día"></canvas>
+  </div>
+</div>
+
+<div style="display:flex;justify-content:center;padding-bottom:8px;">
+  <button class="reset-btn" onclick="resetAll()">reiniciar progreso</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const STORAGE='rpg_habitos_v3';
+
+// XP por hábito, índice 4 = no touch (sin penalización)
+const XPS=[8,10,6,8,2];
+const PENALIZABLE=[true,true,true,true,false];
+
+const HABITS_BG=[
+  'rgba(255,90,90,0.22)',
+  'rgba(75,140,255,0.22)',
+  'rgba(60,200,255,0.22)',
+  'rgba(200,130,255,0.22)',
+  'rgba(80,220,120,0.22)'
+];
+
+const LEVELS=[
+  {name:'yonki',  min:0,   bg:'#2a1a0e',tc:'#a07050'},
+  {name:'parado', min:40,  bg:'#1e2030',tc:'#7080a0'},
+  {name:'rookie', min:100, bg:'#1a2840',tc:'#6090c0'},
+  {name:'sólido', min:200, bg:'#1a2060',tc:'#7090e0'},
+  {name:'elite',  min:350, bg:'#2a1060',tc:'#9060f0'},
+  {name:'alpha',  min:550, bg:'#3a0a50',tc:'#c040e0'},
+  {name:'dios',   min:800, bg:'#1a0a10',tc:'#ffb0d0'}
+];
+
+let state;
+function loadState(){
+  try{const s=localStorage.getItem(STORAGE);if(s)return JSON.parse(s);}catch(e){}
+  return{xp:0,day:1,todayChecked:[false,false,false,false,false],history:[],stats:[1,1,1,1]};
+}
+function saveState(){try{localStorage.setItem(STORAGE,JSON.stringify(state));}catch(e){}}
+function getLevelIdx(xp){let i=0;for(let j=0;j<LEVELS.length;j++){if(xp>=LEVELS[j].min)i=j;}return i;}
+function getNextXP(xp){for(let i=1;i<LEVELS.length;i++){if(xp<LEVELS[i].min)return LEVELS[i].min;}return LEVELS[LEVELS.length-1].min+200;}
+
+// ===== PIXEL ART CHARACTERS =====
+// 7 niveles: yonki→parado→rookie→sólido→elite→alpha→dios
+// Cada uno se dibuja con funciones pixel a pixel en canvas 120x150
+
+function drawHero(xp){
+  const cvs=document.getElementById('heroCanvas');
+  const ctx=cvs.getContext('2d');
+  ctx.clearRect(0,0,120,150);
+  const lv=getLevelIdx(xp);
+
+  // Skin colors por nivel (va aclarando y mejorando)
+  const skins=['#c4a882','#c9ad8c','#d4b896','#dfc0a0','#e8c8aa','#f0d0b4','#f5d8be'];
+  const sk=skins[lv];
+
+  // Helper pixel
+  const S=5;
+  function px(x,y,c,w=1,h=1){ctx.fillStyle=c;ctx.fillRect(x*S,y*S,w*S,h*S);}
+  function row(y,x1,x2,c){for(let x=x1;x<=x2;x++)px(x,y,c);}
+
+  // === NIVEL 0: YONKI (delgado, encorvado, ropa rota, ojos rojos, manchas) ===
+  if(lv===0){
+    const skin='#c0956a',hair='#3a2a1a',cloth='#2a2a30',roto='#1a1a20';
+    // cabeza pequeña y ladeada
+    row(1,4,7,skin);row(2,3,8,skin);row(3,3,8,skin);row(4,3,8,skin);row(5,4,7,skin);
+    // pelo sucio y aplastado
+    row(1,4,7,hair);px(3,2,hair);px(8,2,hair);row(2,3,4,hair);row(2,7,8,hair);
+    // ojos rojos y ojeras
+    px(4,3,'#2a1010');px(7,3,'#2a1010');
+    px(4,3,'#cc3333');px(7,3,'#cc3333');
+    px(3,4,'#5a3030');px(8,4,'#5a3030');// ojeras
+    // boca triste / dientes feos
+    row(5,4,7,'#1a0808');px(5,5,'#eecc99');px(6,5,'#888');
+    // manchas cara
+    px(4,4,'#9a7050');px(7,4,'#9a7050');
+    // cuello delgado
+    row(6,5,6,skin);
+    // cuerpo flaco encorvado
+    row(7,3,8,cloth);row(8,3,8,cloth);row(9,3,8,cloth);
+    // rasgaduras en ropa
+    px(4,7,roto);px(7,8,roto);px(5,9,roto);
+    // brazos muy flacos y caídos
+    px(2,7,skin);px(2,8,skin);px(2,9,cloth);px(2,10,skin);// brazo izq
+    px(9,7,skin);px(9,8,skin);px(9,9,cloth);px(9,10,skin);
+    // manos huesudas
+    px(2,11,'#b08060');px(9,11,'#b08060');
+    // cintura
+    row(10,4,7,'#1e1e28');
+    // piernas muy flacas
+    px(4,11,'#1e1e28');px(4,12,'#1e1e28');px(4,13,'#1e1e28');
+    px(7,11,'#1e1e28');px(7,12,'#1e1e28');px(7,13,'#1e1e28');
+    // pies torcidos (zapatos rotos)
+    row(14,3,5,'#2a1a0a');row(14,6,8,'#2a1a0a');
+    px(3,14,'#1a0a00');px(8,14,'#1a0a00');
+    // moscas encima
+    px(2,0,'#111');px(10,1,'#111');px(1,2,'#111');
+    // olor (marcas)
+    px(0,3,'#2a3a1a');px(11,4,'#2a3a1a');
+  }
+
+  // === NIVEL 1: PARADO (más erguido, ropa de chandal barato) ===
+  else if(lv===1){
+    const skin='#c9ad8c',hair='#4a3a28',cloth='#3a4060',pant='#2a3050';
+    row(1,4,7,skin);row(2,3,8,skin);row(3,3,8,skin);row(4,3,8,skin);row(5,4,7,skin);
+    row(0,4,7,hair);px(3,1,hair);px(8,1,hair);
+    px(4,3,'#2a2a3a');px(7,3,'#2a2a3a');// ojos cansados
+    row(5,5,6,'#9a7a6a');// boca sin expresión
+    row(6,5,6,skin);// cuello
+    row(7,3,8,cloth);row(8,3,8,cloth);row(9,3,8,cloth);
+    px(2,7,skin);px(2,8,cloth);px(2,9,cloth);px(2,10,skin);
+    px(9,7,skin);px(9,8,cloth);px(9,9,cloth);px(9,10,skin);
+    row(10,3,8,pant);row(11,3,8,pant);
+    px(4,12,pant);px(4,13,pant);px(4,14,'#1a1a1a');
+    px(7,12,pant);px(7,13,pant);px(7,14,'#1a1a1a');
+    row(14,3,5,'#222');row(14,6,8,'#222');
+  }
+
+  // === NIVEL 2: ROOKIE (empieza a estar más presentable) ===
+  else if(lv===2){
+    const skin='#d4b896',hair='#3a2a18',shirt='#3a6090',jean='#2a4070';
+    row(1,4,7,skin);row(2,3,8,skin);row(3,3,8,skin);row(4,3,8,skin);row(5,4,7,skin);
+    row(0,3,8,hair);px(3,1,hair);px(8,1,hair);
+    px(4,3,'#2a3050');px(7,3,'#2a3050');
+    px(5,3,'white');px(6,3,'white');// brillo en ojos
+    row(5,5,6,'#c09080');
+    row(6,5,6,skin);
+    row(7,3,8,shirt);row(8,3,8,shirt);row(9,3,8,shirt);
+    px(4,8,'white');px(5,8,'white');// botón camisa
+    px(2,7,skin);px(2,8,skin);px(2,9,shirt);px(9,7,skin);px(9,8,skin);px(9,9,shirt);
+    px(2,10,skin);px(9,10,skin);
+    row(10,3,8,jean);row(11,3,8,jean);
+    px(4,12,jean);px(4,13,jean);px(7,12,jean);px(7,13,jean);
+    row(14,3,5,'#333');row(14,6,8,'#333');
+  }
+
+  // === NIVEL 3: SÓLIDO (cuerpo más ancho, ropa deportiva limpia) ===
+  else if(lv===3){
+    const skin='#dfc0a0',hair='#281808',shirt='#4060a0',pant='#204060';
+    row(1,4,7,skin);row(2,3,8,skin);row(3,3,8,skin);row(4,3,8,skin);row(5,4,7,skin);
+    row(0,3,8,hair);
+    px(4,3,'#203060');px(7,3,'#203060');
+    px(5,3,'#a0c0ff');px(6,3,'#a0c0ff');
+    row(5,4,7,'#c09070');
+    row(6,5,6,skin);
+    // cuerpo más ancho
+    row(7,2,9,shirt);row(8,2,9,shirt);row(9,2,9,shirt);
+    // músculos pequeños en brazos
+    px(2,7,skin);px(2,8,skin);px(2,9,skin);px(2,10,skin);px(2,11,skin);
+    px(9,7,skin);px(9,8,skin);px(9,9,skin);px(9,10,skin);px(9,11,skin);
+    px(1,9,skin);px(10,9,skin);// bíceps
+    row(10,3,8,pant);row(11,3,8,pant);
+    px(4,12,pant);px(4,13,pant);px(7,12,pant);px(7,13,pant);
+    row(14,3,5,'#1a3a5a');row(14,6,8,'#1a3a5a');
+  }
+
+  // === NIVEL 4: ELITE (musculoso, ropa de calidad, mirada fuerte) ===
+  else if(lv===4){
+    const skin='#e8c8aa',hair='#181008',shirt='#203080',pant='#102040';
+    row(1,4,7,skin);row(2,3,8,skin);row(3,3,8,skin);row(4,3,8,skin);row(5,4,7,skin);
+    row(0,3,8,hair);px(3,0,hair);px(8,0,hair);
+    // mandíbula más marcada
+    px(3,5,skin);px(8,5,skin);
+    px(4,3,'#10204a');px(7,3,'#10204a');
+    px(5,3,'#c0d8ff');px(6,3,'#c0d8ff');
+    row(5,5,6,'#c8a080');// sonrisa leve
+    row(6,5,6,skin);
+    // torso V
+    row(7,2,9,shirt);row(8,2,9,shirt);row(9,2,9,shirt);
+    row(10,3,8,shirt);// cintura más estrecha
+    // brazos musculosos
+    px(1,7,skin);px(1,8,skin);px(1,9,skin);px(2,7,skin);px(2,8,skin);px(2,9,skin);px(2,10,skin);px(2,11,skin);
+    px(9,7,skin);px(9,8,skin);px(9,9,skin);px(9,10,skin);px(9,11,skin);px(10,8,skin);px(10,9,skin);
+    px(0,9,skin);px(11,9,skin);// bíceps grandes
+    row(11,3,8,pant);row(12,3,8,pant);
+    px(4,13,pant);px(4,14,pant);px(7,13,pant);px(7,14,pant);
+    row(15,3,5,'#0a1a2a');row(15,6,8,'#0a1a2a');
+    // brillo en zapatos
+    px(4,15,'#304060');px(7,15,'#304060');
+  }
+
+  // === NIVEL 5: ALPHA (alto, musculoso, traje casual caro, pose confiada) ===
+  else if(lv===5){
+    const skin='#f0d0b4',hair='#100808',suit='#1a1a2a',shirt2='white',gold='#d4a030';
+    // cabeza
+    row(0,4,7,skin);row(1,3,8,skin);row(2,3,8,skin);row(3,3,8,skin);row(4,4,7,skin);
+    // pelo peinado perfecto
+    row(0,3,8,hair);
+    // rasgos afilados
+    px(4,2,'#0a1030');px(7,2,'#0a1030');
+    px(5,2,'#d0e8ff');px(6,2,'#d0e8ff');
+    // mandíbula fuerte
+    px(3,3,skin);px(8,3,skin);px(3,4,skin);px(8,4,skin);
+    row(4,5,6,'#e0a080');// sonrisa confiada
+    row(5,5,6,skin);
+    // cuello fuerte
+    row(6,4,7,skin);
+    // traje
+    row(7,2,9,suit);row(8,2,9,suit);row(9,2,9,suit);row(10,2,9,suit);
+    row(7,5,6,shirt2);row(8,5,6,shirt2);// camisa blanca interior
+    // corbata o detalle oro
+    px(5,7,gold);px(6,7,gold);px(5,8,gold);px(6,8,gold);px(5,9,gold);
+    // hombros anchos + brazos
+    px(1,7,suit);px(1,8,suit);px(1,9,skin);px(1,10,skin);px(1,11,skin);px(2,7,suit);px(2,8,skin);px(2,9,skin);px(2,10,skin);px(2,11,skin);
+    px(9,7,suit);px(9,8,skin);px(9,9,skin);px(9,10,skin);px(9,11,skin);px(10,7,suit);px(10,8,suit);px(10,9,skin);
+    px(0,9,skin);px(11,9,skin);
+    // mano con reloj
+    px(1,12,skin);px(2,12,skin);px(2,12,gold);
+    px(9,12,skin);px(10,12,skin);
+    // pantalón de traje
+    row(12,3,8,'#141420');row(13,3,8,'#141420');
+    px(4,14,'#141420');px(4,15,'#141420');px(7,14,'#141420');px(7,15,'#141420');
+    // zapatos de lujo
+    row(16,3,5,'#0a0808');row(16,6,8,'#0a0808');
+    px(4,16,'#3a2020');px(7,16,'#3a2020');// brillos
+  }
+
+  // === NIVEL 6: DIOS (perfecto, corona, aura dorada) ===
+  else if(lv===6){
+    const skin='#f5d8be',hair='#0a0808',suit='#080810',gold='#e8c030',crown='#f0b020',aura='rgba(240,180,30,0.4)';
+    // aura
+    ctx.fillStyle=aura;
+    ctx.beginPath();ctx.arc(60,70,52,0,Math.PI*2);ctx.fill();
+    // corona
+    px(4,0,crown);px(5,0,crown);px(6,0,crown);px(7,0,crown);
+    px(3,1,crown);px(5,1,crown);px(6,1,crown);px(8,1,crown);
+    px(4,1,crown);px(7,1,crown);
+    px(4,2,crown);px(7,2,crown);// puntas
+    px(3,0,'#d09010');px(8,0,'#d09010');
+    // cabeza
+    row(2,3,8,skin);row(3,3,8,skin);row(4,3,8,skin);row(5,3,8,skin);row(6,4,7,skin);
+    // pelo
+    row(2,3,8,hair);
+    // ojos luminosos
+    px(4,3,'#0a0820');px(7,3,'#0a0820');
+    px(5,3,'#e0f0ff');px(6,3,'#e0f0ff');
+    // mandíbula perfecta
+    px(3,4,skin);px(8,4,skin);px(3,5,skin);px(8,5,skin);
+    // sonrisa perfecta
+    px(5,5,'white');px(6,5,'white');px(4,6,'#d09070');px(7,6,'#d09070');
+    // cuello
+    row(7,5,6,skin);
+    // traje oscuro con detalles dorados
+    row(8,2,9,suit);row(9,2,9,suit);row(10,2,9,suit);row(11,2,9,suit);
+    // camisa
+    row(8,4,7,'#f0f0ff');row(9,5,6,'#f0f0ff');
+    // solapa dorada
+    px(4,9,gold);px(7,9,gold);
+    px(5,8,'#e8e8ff');px(6,8,'#e8e8ff');
+    // hombros extra anchos
+    px(0,8,suit);px(1,8,suit);px(1,9,skin);px(1,10,skin);px(1,11,skin);px(1,12,skin);
+    px(10,8,suit);px(10,9,skin);px(10,10,skin);px(10,11,skin);px(10,12,skin);px(11,8,suit);
+    px(2,8,skin);px(2,9,skin);px(2,10,skin);px(2,11,skin);px(2,12,skin);
+    px(9,8,skin);px(9,9,skin);px(9,10,skin);px(9,11,skin);px(9,12,skin);
+    // músculos visibles
+    px(0,10,skin);px(11,10,skin);px(0,11,skin);px(11,11,skin);
+    // relojes / accesorios
+    px(1,12,gold);px(10,12,gold);
+    // manos
+    px(1,13,skin);px(2,13,skin);px(9,13,skin);px(10,13,skin);
+    // pantalón
+    row(13,3,8,'#060606');row(14,3,8,'#060606');
+    px(4,15,'#060606');px(4,16,'#060606');px(7,15,'#060606');px(7,16,'#060606');
+    // zapatos de dios (dorados)
+    row(17,3,5,gold);row(17,6,8,gold);
+    px(3,17,'#c09020');px(8,17,'#c09020');
+    // partículas de aura
+    ctx.fillStyle='rgba(240,200,50,0.7)';
+    [[15,15],[100,20],[10,80],[105,90],[20,120],[98,115]].forEach(([x,y])=>{
+      ctx.fillRect(x,y,3,3);
+    });
+  }
+}
+
+let chart=null;
+function buildChart(){
+  if(chart)chart.destroy();
+  const cvs=document.getElementById('progressChart');
+  const hist=state.history;
+  const labels=hist.length?hist.map((_,i)=>'D'+(i+1)):['inicio'];
+  const xpData=hist.length?hist.map(h=>h.xp):[0];
+  const lvData=hist.length?hist.map(h=>getLevelIdx(h.xp)):[0];
+  const barColors=xpData.map((v,i)=>{
+    if(i===0)return 'rgba(155,119,255,0.7)';
+    return v<xpData[i-1]?'rgba(255,90,90,0.7)':'rgba(155,119,255,0.7)';
+  });
+  chart=new Chart(cvs,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'XP',data:xpData,backgroundColor:barColors,borderColor:barColors.map(c=>c.replace('0.7','1')),borderWidth:1,borderRadius:6,yAxisID:'y'},
+        {label:'Nivel',data:lvData,type:'line',borderColor:'#50dc78',backgroundColor:'rgba(80,220,120,0.1)',borderWidth:2,pointRadius:3,pointBackgroundColor:'#50dc78',tension:0.4,fill:true,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>c.dataset.label+': '+c.parsed.y}}},
+      scales:{
+        x:{ticks:{font:{size:9},color:'#cdb8ff',autoSkip:true,maxRotation:0},grid:{color:'rgba(255,255,255,0.05)'}},
+        y:{position:'left',ticks:{font:{size:9},color:'#9b77ff'},grid:{color:'rgba(255,255,255,0.07)'}},
+        y2:{position:'right',min:0,max:6,ticks:{font:{size:9},color:'#50dc78',stepSize:1,callback:(v)=>'nv'+v},grid:{display:false}}
+      }
+    }
+  });
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+function calcNeto(){
+  let earned=0,penalty=0;
+  state.todayChecked.forEach((c,i)=>{
+    if(c)earned+=XPS[i];
+    else if(PENALIZABLE[i])penalty+=3;
+  });
+  return{earned,penalty,net:earned-penalty};
+}
+
+function render(){
+  const lvIdx=getLevelIdx(state.xp);
+  const lv=LEVELS[lvIdx];
+  const nextXP=getNextXP(state.xp);
+  const prevXP=LEVELS[lvIdx].min;
+  const range=nextXP-prevXP;
+  const pct=range>0?Math.round(((state.xp-prevXP)/range)*100):100;
+
+  document.getElementById('levelLabel').textContent='nivel '+(lvIdx+1);
+  const badge=document.getElementById('heroBadge');
+  badge.textContent=lv.name;badge.style.background=lv.bg;badge.style.color=lv.tc;
+  document.getElementById('xpLabel').textContent=state.xp+' / '+nextXP;
+  document.getElementById('xpBar').style.width=Math.min(pct,100)+'%';
+  document.getElementById('dayNum').textContent=state.day;
+  document.getElementById('statStr').textContent='FUE '+state.stats[0];
+  document.getElementById('statInt').textContent='INT '+state.stats[1];
+  document.getElementById('statFoc').textContent='FOC '+state.stats[2];
+  document.getElementById('statDis').textContent='DIS '+state.stats[3];
+
+  const{net}=calcNeto();
+  document.getElementById('todayXP').textContent=(net>=0?'+':'')+net;
+  document.getElementById('todayXP').style.color=net>=0?'white':'#ff7070';
+
+  state.todayChecked.forEach((c,i)=>{
+    const btn=document.getElementById('hb'+i);
+    const lbl=document.getElementById('hcheck'+i);
+    btn.style.background=c?HABITS_BG[i]:'rgba(255,255,255,0.03)';
+    btn.style.borderColor=c?(i===4?'rgba(80,220,120,0.6)':'rgba(163,96,255,0.4)'):'rgba(255,255,255,0.08)';
+    if(c)lbl.textContent='✓';
+    else if(i===4)lbl.textContent='+2';
+    else lbl.textContent='+'+XPS[i];
+  });
+
+  drawHero(state.xp);
+  buildChart();
+}
+
+function toggleHabit(idx){
+  state.todayChecked[idx]=!state.todayChecked[idx];
+  saveState();render();
+}
+
+function commitDay(){
+  const prevLv=getLevelIdx(state.xp);
+  const{earned,penalty,net}=calcNeto();
+
+  // stats
+  const STAT_MAP=[[0],[1],[3],[2,3],[2]];
+  state.todayChecked.forEach((c,i)=>{
+    if(c&&i<4)STAT_MAP[i].forEach(s=>{state.stats[s]=Math.min(99,state.stats[s]+1);});
+  });
+
+  state.xp=Math.max(0,state.xp+net);
+  const newLv=getLevelIdx(state.xp);
+
+  state.history.push({day:state.day,xp:state.xp});
+  if(state.history.length>30)state.history.shift();
+  state.day++;
+  state.todayChecked=[false,false,false,false,false];
+
+  const done=state.todayChecked.filter(Boolean).length;
+  let msg='';
+  if(earned===0)msg='Sin hábitos. -'+penalty+' XP hoy. Mañana te levantas.';
+  else if(penalty===0&&earned>0)msg='¡Día perfecto! +'+earned+' XP. Imparable.';
+  else msg='Ganaste +'+earned+' XP, penalización -'+penalty+'. Neto: '+(net>=0?'+':'')+net+' XP.';
+  document.getElementById('msgBox').textContent=msg;
+
+  if(newLv>prevLv)showToast('⬆ SUBISTE A '+LEVELS[newLv].name.toUpperCase()+'!');
+  else if(newLv<prevLv)showToast('⬇ Bajaste a '+LEVELS[newLv].name+'...');
+  else showToast((net>=0?'+':'')+net+' XP hoy');
+
+  saveState();render();
+}
+
+function resetAll(){
+  if(confirm('¿Reiniciar todo el progreso?')){
+    state={xp:0,day:1,todayChecked:[false,false,false,false,false],history:[],stats:[1,1,1,1]};
+    saveState();
+    document.getElementById('msgBox').textContent='Reiniciado. Empieza desde cero.';
+    render();
+  }
+}
+
+state=loadState();
+render();
+</script>
+</body>
+</html>
