@@ -297,8 +297,8 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;}
     <button class="hbtn" id="hb4" onclick="toggleHabit(4)" style="border-color:rgba(80,220,120,0.3);">
       <span style="font-size:26px;">🚫</span>
       <div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
-        <span>no touch</span>
-        <span style="font-size:11px;color:rgba(80,220,120,0.7);font-weight:400;">+2 XP — sin penalización</span>
+        <span>no touch scroll</span>
+        <span style="font-size:11px;color:rgba(80,220,120,0.7);font-weight:400;">+2 XP </span>
       </div>
       <span style="margin-left:auto;font-size:13px;min-width:36px;text-align:right;" id="hcheck4">+2</span>
     </button>
@@ -336,9 +336,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;}
 <script>
 const STORAGE='rpg_habitos_v3';
 
-// XP por hábito, índice 4 = no touch (sin penalización)
+// XP por hábito, índice 4 
 const XPS=[8,10,6,8,2];
-const PENALIZABLE=[true,true,true,true,false];
+const PENALIZABLE=[true,true,true,true,true];
 
 const HABITS_BG=[
   'rgba(255,90,90,0.22)',
