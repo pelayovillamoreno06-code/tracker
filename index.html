@@ -1354,57 +1354,98 @@ render();
 </script>
 
 <script>
+/* === iPHONE WEBAUDIO RPG SOUND ENGINE === */
 (function(){
-let ctx=null, unlocked=false;
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let ctx;
 
-function unlockAllAudio(){
-  try{
-    if(!ctx){
-      ctx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if(ctx.state==="suspended"){ ctx.resume(); }
-
-    const b=ctx.createBuffer(1,1,22050);
-    const s=ctx.createBufferSource();
-    s.buffer=b;
-    s.connect(ctx.destination);
-    s.start(0);
-
-    document.querySelectorAll('audio').forEach(a=>{
-      try{
-        a.muted=true;
-        a.play().then(()=>{
-          a.pause();
-          a.currentTime=0;
-          a.muted=false;
-        }).catch(()=>{a.muted=false;});
-      }catch(e){}
-    });
-
-    unlocked=true;
-    const banner=document.getElementById('audioUnlockBanner');
-    if(banner) banner.style.display='none';
-  }catch(e){console.log(e);}
+function getCtx(){
+  if(!ctx){
+    ctx = new AudioCtx();
+  }
+  if(ctx.state==="suspended") ctx.resume();
+  return ctx;
 }
 
-window.iosUnlockAudio = unlockAllAudio;
+function tone(freq,dur,type="sine",vol=0.08){
+  const c=getCtx();
+  const o=c.createOscillator();
+  const g=c.createGain();
+  o.type=type;
+  o.frequency.value=freq;
+  g.gain.value=vol;
+  o.connect(g);
+  g.connect(c.destination);
+  o.start();
+  g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+dur);
+  o.stop(c.currentTime+dur);
+}
 
-['touchstart','touchend','click'].forEach(evt=>{
-  document.addEventListener(evt,function once(){
-    if(!unlocked) unlockAllAudio();
-  },{passive:true});
-});
-
-const origPlay = HTMLMediaElement.prototype.play;
-HTMLMediaElement.prototype.play = function(){
-  if(!unlocked) unlockAllAudio();
-  return origPlay.apply(this, arguments);
+window.RPGAudio={
+ click(){tone(900,.05,"square",0.05);},
+ xp(){tone(1200,.08,"triangle",0.06);setTimeout(()=>tone(1500,.08,"triangle",0.05),60);},
+ levelUp(){
+   [880,1175,1568,2093].forEach((f,i)=>setTimeout(()=>tone(f,.16,"triangle",0.08),i*90));
+ },
+ victory(){
+   [523,659,784,1046].forEach((f,i)=>setTimeout(()=>tone(f,.22,"triangle",0.08),i*120));
+ },
+ defeat(){
+   [500,420,340,260].forEach((f,i)=>setTimeout(()=>tone(f,.25,"sawtooth",0.07),i*120));
+ },
+ combat(){
+   tone(110,.08,"sawtooth",0.09);
+   setTimeout(()=>tone(70,.12,"square",0.08),70);
+ }
 };
 
-window.addEventListener('load',()=>{
-  const banner=document.getElementById('audioUnlockBanner');
-  if(banner) banner.style.display='block';
-});
+function unlock(){
+ try{
+   getCtx();
+   const b=ctx.createBuffer(1,1,22050);
+   const s=ctx.createBufferSource();
+   s.buffer=b;
+   s.connect(ctx.destination);
+   s.start();
+ }catch(e){}
+}
+
+document.addEventListener("touchstart",unlock,{once:true});
+document.addEventListener("click",unlock,{once:true});
+
+const origToggle=window.toggleHabit;
+if(origToggle){
+ window.toggleHabit=function(){
+   RPGAudio.click();
+   return origToggle.apply(this,arguments);
+ }
+}
+
+const origCommit=window.commitDay;
+if(origCommit){
+ window.commitDay=function(){
+   RPGAudio.xp();
+   return origCommit.apply(this,arguments);
+ }
+}
+
+const origFight=window.fightEnemy;
+if(origFight){
+ window.fightEnemy=function(){
+   RPGAudio.combat();
+   return origFight.apply(this,arguments);
+ }
+}
+
+const origShowToast=window.showToast;
+if(origShowToast){
+ window.showToast=function(msg){
+   const t=(msg||"").toLowerCase();
+   if(t.includes("level")) RPGAudio.levelUp();
+   else if(t.includes("xp")) RPGAudio.xp();
+   return origShowToast.apply(this,arguments);
+ }
+}
 })();
 </script>
 
