@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Habitos RPG">
 <meta name="theme-color" content="#050510">
-<title>Habitos RPG Ultra</title>
+<title>Habitos RPG V2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght=700;900&family=Rajdhani:wght=400;600;700&display=swap" rel="stylesheet">
@@ -29,24 +29,13 @@ body::before{
   animation:bgPulse 8s ease-in-out infinite alternate;
 }
 @keyframes bgPulse{from{filter:brightness(1);}to{filter:brightness(1.15);}}
-body::after{
-  content:'';position:fixed;inset:0;z-index:-1;
-  background-image:radial-gradient(1px 1px at 10% 20%,rgba(255,255,255,.6),transparent),
-    radial-gradient(1px 1px at 30% 70%,rgba(255,255,255,.4),transparent),
-    radial-gradient(1px 1px at 60% 15%,rgba(255,255,255,.5),transparent),
-    radial-gradient(1px 1px at 80% 40%,rgba(255,255,255,.3),transparent),
-    radial-gradient(1.5px 1.5px at 70% 55%,rgba(180,140,255,.5),transparent),
-    radial-gradient(1.5px 1.5px at 40% 35%,rgba(140,180,255,.4),transparent);
-  animation:starsTwinkle 4s ease-in-out infinite alternate;
-}
-@keyframes starsTwinkle{from{opacity:.6;}to{opacity:1;}}
 .font-orb{font-family:'Orbitron',monospace;}
 .font-raj{font-family:'Rajdhani',sans-serif;}
 .card{
   background:linear-gradient(135deg,rgba(18,12,40,.95),rgba(10,8,30,.9));
   border:1px solid rgba(140,80,255,.3);border-radius:20px;padding:18px 16px;
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  box-shadow:0 0 0 1px rgba(100,60,200,.1),0 8px 32px rgba(80,40,160,.4),inset 0 1px 0 rgba(255,255,255,.07);
+  box-shadow:0 8px 32px rgba(80,40,160,.4),inset 0 1px 0 rgba(255,255,255,.07);
   animation:cardIn .5s cubic-bezier(.16,1,.3,1) both;
 }
 @keyframes cardIn{from{opacity:0;transform:translate3d(0,24px,0);}to{opacity:1;transform:translate3d(0,0,0);}}
@@ -86,9 +75,6 @@ body::after{
   border-color:rgba(52,211,153,.4);
   background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(5,30,20,.2));
 }
-.hbtn.completed::before{
-  content:'';position:absolute;inset:0;background:rgba(52,211,153,.03);pointer-events:none;
-}
 .xp-bar-wrap{
   background:rgba(255,255,255,.05);border-radius:999px;height:14px;
   overflow:hidden;width:100%;border:1px solid rgba(255,255,255,.08);
@@ -98,51 +84,24 @@ body::after{
   transition:width .6s cubic-bezier(.16,1,.3,1);
   background:linear-gradient(90deg,#6d28d9,#8b5cf6,#c4b5fd);
   box-shadow:0 0 12px rgba(139,92,246,.8);
-  position:relative;
 }
-.xp-fill::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
-  animation:xpShine 2s ease-in-out infinite;
-}
-@keyframes xpShine{0%{transform:translateX(-100%);}100%{transform:translateX(200%);}}
 .hero-wrap{
-  background:radial-gradient(ellipse 80% 70% at 50% 60%,rgba(100,50,200,.25) 0%,transparent 70%),
-    radial-gradient(ellipse 100% 100% at 50% 50%,rgba(20,10,50,.8) 0%,rgba(5,5,16,.9) 100%);
+  background:radial-gradient(ellipse 80% 70% at 50% 60%,rgba(100,50,200,.15) 0%,transparent 70%),
+    radial-gradient(ellipse 100% 100% at 50% 50%,rgba(10,5,30,.6) 0%,rgba(5,5,16,.9) 100%);
   border-radius:20px;padding:20px 16px 16px;
   display:flex;align-items:center;justify-content:center;
   position:relative;overflow:hidden;min-height:300px;
   border:1px solid rgba(100,60,200,.2);
 }
 .hero-shadow{
-  position:absolute;bottom:12px;left:50%;width:120px;height:20px;
-  background:radial-gradient(ellipse,rgba(100,50,200,.5),transparent 70%);
-  transform:translateX(-50%);border-radius:50%;filter:blur(5px);
+  position:absolute;bottom:16px;left:50%;width:110px;height:14px;
+  background:radial-gradient(ellipse,rgba(0,0,0,.6),transparent 70%);
+  transform:translateX(-50%);border-radius:50%;
 }
 #heroCanvas{
   image-rendering:pixelated;image-rendering:crisp-edges;
-  cursor:pointer;position:relative;z-index:2;
-  animation:heroFloat 3s ease-in-out infinite;will-change:transform;
+  position:relative;z-index:2;will-change:transform;
 }
-@keyframes heroFloat{0%,100%{transform:translate3d(0,0,0);}50%{transform:translate3d(0,-8px,0);}}
-.stat-box{
-  background:rgba(255,255,255,.04);border-radius:14px;
-  padding:12px 8px;text-align:center;
-  border:1px solid rgba(255,255,255,.06);
-}
-#speechBubble{
-  position:fixed;z-index:200;max-width:280px;
-  background:linear-gradient(135deg,rgba(25,15,55,.98),rgba(15,10,40,.98));
-  border:1px solid rgba(139,92,246,.6);border-radius:16px;padding:14px 16px;
-  font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;
-  color:#e0d0ff;line-height:1.5;
-  box-shadow:0 8px 32px rgba(80,40,160,.6);
-  pointer-events:none;opacity:0;
-  transform:scale(.8) translate3d(0,10px,0);
-  transition:opacity .2s ease,transform .2s cubic-bezier(.16,1,.3,1);
-}
-#speechBubble.show{opacity:1;transform:scale(1) translate3d(0,0,0);}
-#speechBubble::after{content:"\25BC";position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:12px;color:rgba(139,92,246,.6);}
 #toast{
   position:fixed;top:max(env(safe-area-inset-top,0px),20px);left:50%;
   transform:translate3d(-50%,0,0);z-index:300;
@@ -154,22 +113,11 @@ body::after{
   box-shadow:0 8px 24px rgba(80,40,160,.5);
 }
 #toast.show{opacity:1;}
-#animOverlay{
-  position:fixed;inset:0;z-index:400;background:rgba(5,5,16,.92);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
-  opacity:0;pointer-events:none;transition:opacity .4s ease;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-}
-#animOverlay.show{opacity:1;pointer-events:all;}
-#animMsg{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:#a78bfa;letter-spacing:2px;text-align:center;}
-#animSubMsg{font-family:'Rajdhani',sans-serif;font-size:16px;color:#c4b5fd;text-align:center;max-width:280px;line-height:1.5;}
-#particleCanvas{position:fixed;inset:0;z-index:350;pointer-events:none;}
 #combatModal{
   position:fixed;inset:0;z-index:500;background:rgba(2,2,10,.97);
   display:flex;flex-direction:column;align-items:center;
   padding:max(env(safe-area-inset-top,0px),24px) 16px max(env(safe-area-inset-bottom,0px),24px);
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
-  opacity:0;transform:translate3d(0,100%,0);
+  overflow-y:auto;opacity:0;transform:translate3d(0,100%,0);
   transition:opacity .4s ease,transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none;
 }
 #combatModal.show{opacity:1;transform:translate3d(0,0,0);pointer-events:all;}
@@ -180,9 +128,8 @@ body::after{
   cursor:pointer;transition:all .15s ease;touch-action:manipulation;
 }
 .enemy-card:active{transform:scale(.97);}
-.enemy-card.disabled{opacity:.4;pointer-events:none;}
 .enemy-bar-wrap{flex:1;background:rgba(255,255,255,.08);border-radius:999px;height:8px;overflow:hidden;}
-.enemy-bar{height:100%;border-radius:999px;transition:width .4s ease;}
+.enemy-bar{height:100%;border-radius:999px;}
 .combat-result{
   position:fixed;inset:0;z-index:600;background:rgba(2,2,10,.95);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;
@@ -196,35 +143,27 @@ body::after{
 .chart-wrap{position:relative;width:100%;height:200px;}
 .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,.3),transparent);margin:8px 0;}
 .hero-hurt{animation:hurtShake .5s ease both !important;}
-@keyframes hurtShake{0%{transform:translate3d(0,0,0);}20%{transform:translate3d(-8px,0,0) rotate(-5deg);}40%{transform:translate3d(8px,4px,0) rotate(5deg);}60%{transform:translate3d(-4px,8px,0) rotate(-3deg);}80%{transform:translate3d(4px,12px,0) rotate(2deg);}100%{transform:translate3d(0,0,0);}}
+@keyframes hurtShake{0%{transform:translate3d(0,0,0);}20%{transform:translate3d(-6px,0,0);}40%{transform:translate3d(6px,2px,0);}60%{transform:translate3d(-3px,4px,0);}100%{transform:translate3d(0,0,0);}}
 .hero-levelup{animation:levelupBounce .6s cubic-bezier(.16,1,.3,1) both !important;}
-@keyframes levelupBounce{0%{transform:translate3d(0,0,0) scale(1);}40%{transform:translate3d(0,-20px,0) scale(1.15);}70%{transform:translate3d(0,-8px,0) scale(1.05);}100%{transform:translate3d(0,0,0) scale(1);}}
-.lock-notice{font-family:'Rajdhani',sans-serif;font-size:13px;color:rgba(255,100,100,.7);text-align:center;margin-top:6px;}
-::-webkit-scrollbar{display:none;}
-.screen-flash{position:fixed;inset:0;z-index:9999;pointer-events:none;background:rgba(255,255,255,.22);animation:flashOut .4s ease-out forwards;}
-@keyframes flashOut{from{opacity:1;}to{opacity:0;} }
-body.danger-mode .card{border-color:rgba(255,50,50,.5)!important;}
-body.danger-mode{background:#0a0000!important;}
-.xp-popup{position:fixed;pointer-events:none;z-index:700;font-family:Orbitron,monospace;font-size:15px;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.8);animation:xpFloat 1.3s ease-out forwards;}
-@keyframes xpFloat{0%{opacity:1;transform:translate3d(0,0,0) scale(1);}60%{opacity:1;transform:translate3d(0,-48px,0) scale(1.2);}100%{opacity:0;transform:translate3d(0,-90px,0) scale(.8);}}
-#audioUnlockBanner{position:fixed;bottom:max(env(safe-area-inset-bottom,0px),16px);left:50%;transform:translateX(-50%);z-index:999;background:linear-gradient(135deg,rgba(139,92,246,.95),rgba(80,40,160,.95));border:1px solid rgba(200,160,255,.5);border-radius:999px;padding:12px 24px;font-family:Orbitron,monospace;font-size:10px;font-weight:700;color:white;letter-spacing:1px;cursor:pointer;box-shadow:0 8px 24px rgba(139,92,246,.6);touch-action:manipulation;text-align:center;white-space:nowrap;}
+@keyframes levelupBounce{0%{transform:scale(1);}50%{transform:scale(1.18) translate3d(0,-15px,0);}100%{transform:scale(1);}}
+#safariAudioOverlay{
+  position:fixed;inset:0;z-index:9999;background:#050510;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;
+}
 </style>
 </head>
 <body>
-<div id="toast"></div>
-<div id="speechBubble"></div>
-<canvas id="particleCanvas"></canvas>
-
-<div id="animOverlay">
-  <canvas id="animCanvas" width="240" height="240" style="image-rendering:pixelated;"></canvas>
-  <div id="animMsg"></div>
-  <div id="animSubMsg"></div>
-  <button class="btn" onclick="closeAnimOverlay()" style="margin-top:10px;">CONTINUAR</button>
+<div id="safariAudioOverlay">
+  <div class="font-orb" style="font-size:20px;color:#a78bfa;margin-bottom:8px;letter-spacing:2px;">HABITOS RPG V2</div>
+  <div class="font-raj" style="font-size:15px;color:rgba(200,180,255,.7);margin-bottom:24px;max-width:280px;">Toca para inicializar el motor de gráficos evolutivos y sincronizar el sistema de audio para iOS Safari.</div>
+  <button class="btn" style="padding:16px 32px;font-size:12px;" onclick="startAppWithAudio()">INICIAR AVENTURA</button>
 </div>
+
+<div id="toast"></div>
 
 <div class="combat-result" id="combatResult">
   <div id="combatResultEmoji" style="font-size:64px;"></div>
-  <div id="combatResultTitle" class="font-orb" style="font-size:20px;font-weight:700;letter-spacing:2px;"></div>
+  <div id="combatResultTitle" class="font-orb" style="font-size:20px;letter-spacing:2px;"></div>
   <div id="combatResultMsg" class="font-raj" style="font-size:15px;color:#c4b5fd;text-align:center;max-width:280px;line-height:1.5;white-space:pre-line;"></div>
   <button class="btn" onclick="closeCombatResult()">VOLVER</button>
 </div>
@@ -233,61 +172,55 @@ body.danger-mode{background:#0a0000!important;}
   <div style="width:100%;max-width:400px;">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
       <button class="btn-reset" onclick="closeCombat()" style="padding:8px 14px;font-size:12px;">&larr; Salir</button>
-      <div class="font-orb" style="font-size:13px;font-weight:700;color:#f87171;letter-spacing:2px;">MODO COMBATE</div>
+      <div class="font-orb" style="font-size:13px;color:#f87171;letter-spacing:2px;">MODO COMBATE</div>
     </div>
-    <div id="combatLockMsg" class="lock-notice" style="display:none;padding:20px;background:rgba(100,20,20,.3);border-radius:14px;border:1px solid rgba(200,50,50,.2);margin-bottom:16px;"></div>
-    <div id="combatArena" style="display:none;">
+    <div id="combatArena">
       <div style="text-align:center;margin-bottom:16px;">
-        <div class="font-raj" style="font-size:13px;color:rgba(200,150,255,.7);">Stats actuales</div>
-        <div style="display:flex;gap:10px;justify-content:center;margin-top:8px;flex-wrap:wrap;" id="combatStats"></div>
+        <div class="font-raj" style="font-size:13px;color:rgba(200,150,255,.7);">Tus Atributos Actuales</div>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:8px;" id="combatStats"></div>
       </div>
       <div class="divider"></div>
-      <div class="font-orb" style="font-size:9px;color:rgba(255,150,150,.7);letter-spacing:2px;margin:12px 0 8px;">ELIGE TU ENEMIGO</div>
       
-      <div class="enemy-card" id="enemy0" onclick="fightEnemy(0)">
-        <div style="font-size:40px;flex-shrink:0;">🧙‍♂️</div>
+      <div class="enemy-card" onclick="fightEnemy(0)">
+        <div style="font-size:40px;">🧙‍♂️</div>
         <div style="flex:1;">
-          <div class="font-orb" style="font-size:10px;font-weight:700;color:#a78bfa;margin-bottom:4px;">MAGO PSICOLOGO</div>
-          <div class="font-raj" style="font-size:12px;color:rgba(200,180,255,.6);margin-bottom:6px;">Requiere INT &gt; <span id="e0req">0</span></div>
-          <div class="enemy-bar-wrap"><div class="enemy-bar" id="e0bar" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);width:100%;"></div></div>
+          <div class="font-orb" style="font-size:10px;color:#a78bfa;">MAGO PSICOLOGO</div>
+          <div class="font-raj" style="font-size:12px;color:rgba(200,180,255,.6); margin-bottom:4px;">Requiere INT > <span id="e0req">0</span></div>
+          <div class="enemy-bar-wrap"><div class="enemy-bar" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);width:100%;"></div></div>
         </div>
-        <div class="font-raj" style="font-size:22px;font-weight:700;" id="e0xp">+15 XP</div>
+        <div class="font-raj" style="font-size:20px;font-weight:700;">+15 XP</div>
       </div>
 
-      <div class="enemy-card" id="enemy1" onclick="fightEnemy(1)">
-        <div style="font-size:40px;flex-shrink:0;">👹</div>
+      <div class="enemy-card" onclick="fightEnemy(1)">
+        <div style="font-size:40px;">👹</div>
         <div style="flex:1;">
-          <div class="font-orb" style="font-size:10px;font-weight:700;color:#f87171;margin-bottom:4px;">GIGANTE SALVAJE</div>
-          <div class="font-raj" style="font-size:12px;color:rgba(255,200,200,.6);margin-bottom:6px;">Requiere FUE &gt; <span id="e1req">0</span></div>
-          <div class="enemy-bar-wrap"><div class="enemy-bar" id="e1bar" style="background:linear-gradient(90deg,#7f1d1d,#ef4444);width:100%;"></div></div>
+          <div class="font-orb" style="font-size:10px;color:#f87171;">GIGANTE SALVAJE</div>
+          <div class="font-raj" style="font-size:12px;color:rgba(255,200,200,.6); margin-bottom:4px;">Requiere FUE > <span id="e1req">0</span></div>
+          <div class="enemy-bar-wrap"><div class="enemy-bar" style="background:linear-gradient(90deg,#7f1d1d,#ef4444);width:100%;"></div></div>
         </div>
-        <div class="font-raj" style="font-size:22px;font-weight:700;" id="e1xp">+20 XP</div>
+        <div class="font-raj" style="font-size:20px;font-weight:700;">+20 XP</div>
       </div>
 
-      <div class="enemy-card" id="enemy2" onclick="fightEnemy(2)">
-        <div style="font-size:40px;flex-shrink:0;">👁️</div>
+      <div class="enemy-card" onclick="fightEnemy(2)">
+        <div style="font-size:40px;">👁️</div>
         <div style="flex:1;">
-          <div class="font-orb" style="font-size:10px;font-weight:700;color:#34d399;margin-bottom:4px;">SER MISTERIOSO</div>
-          <div class="font-raj" style="font-size:12px;color:rgba(150,255,200,.6);margin-bottom:6px;">Requiere FOC &gt; <span id="e2req">0</span></div>
-          <div class="enemy-bar-wrap"><div class="enemy-bar" id="e2bar" style="background:linear-gradient(90deg,#064e3b,#34d399);width:100%;"></div></div>
+          <div class="font-orb" style="font-size:10px;color:#34d399;">SER MISTERIOSO</div>
+          <div class="font-raj" style="font-size:12px;color:rgba(150,255,200,.6); margin-bottom:4px;">Requiere FOC > <span id="e2req">0</span></div>
+          <div class="enemy-bar-wrap"><div class="enemy-bar" style="background:linear-gradient(90deg,#064e3b,#34d399);width:100%;"></div></div>
         </div>
-        <div class="font-raj" style="font-size:22px;font-weight:700;" id="e2xp">+12 XP</div>
-      </div>
-      <div class="divider" style="margin-top:16px;"></div>
-      <div class="font-raj" style="font-size:12px;color:rgba(180,150,255,.5);text-align:center;margin-top:10px;">
-        Combate disponible hoy.
+        <div class="font-raj" style="font-size:20px;font-weight:700;">+12 XP</div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="main-grid">
-  <div class="card" style="display:flex;flex-direction:column;align-items:center;gap:14px;animation-delay:.05s;">
-    <div id="levelLabel" class="font-orb" style="font-size:9px;color:rgba(180,150,255,.7);letter-spacing:2px;"></div>
-    <span id="heroBadge" class="level-badge"></span>
+  <div class="card" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+    <div id="levelLabel" class="font-orb" style="font-size:10px;color:#ffaa00;letter-spacing:2px;text-align:center;">ESTADO: MENDIGO</div>
+    <span id="heroBadge" class="level-badge">NIVEL 1</span>
     <div class="hero-wrap" style="width:100%;">
       <div class="hero-shadow"></div>
-      <canvas id="heroCanvas" width="220" height="260" style="width:220px;height:260px;cursor:pointer;" onclick="heroTap(event)"></canvas>
+      <canvas id="heroCanvas" width="220" height="260" style="width:220px;height:260px;" onclick="triggerTap()"></canvas>
     </div>
     <div style="width:100%;">
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
@@ -297,102 +230,81 @@ body.danger-mode{background:#0a0000!important;}
       <div class="xp-bar-wrap"><div class="xp-fill" id="xpBar"></div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;">
-      <div class="stat-box"><div class="font-orb" style="font-size:11px;" id="statStr">FUE 1</div><div class="font-raj" style="font-size:11px;color:rgba(200,180,255,.6);margin-top:4px;">fuerza</div></div>
-      <div class="stat-box"><div class="font-orb" style="font-size:11px;" id="statInt">INT 1</div><div class="font-raj" style="font-size:11px;color:rgba(200,180,255,.6);margin-top:4px;">mente</div></div>
-      <div class="stat-box"><div class="font-orb" style="font-size:11px;" id="statFoc">FOC 1</div><div class="font-raj" style="font-size:11px;color:rgba(200,180,255,.6);margin-top:4px;">foco</div></div>
-      <div class="stat-box"><div class="font-orb" style="font-size:11px;" id="statDis">DIS 1</div><div class="font-raj" style="font-size:11px;color:rgba(200,180,255,.6);margin-top:4px;">disciplina</div></div>
+      <div class="stat-box"><div class="font-orb" style="font-size:11px;" id="statStr">FUE 1</div></div>
+      <div class="stat-box"><div class="font-orb" style="font-size:11px;" id="statInt">INT 1</div></div>
+      <div class="stat-box"><div class="font-orb" style="font-size:11px;" id="statFoc">FOC 1</div></div>
+      <div class="stat-box"><div class="font-orb" style="font-size:11px;" id="statDis">DIS 1</div></div>
     </div>
     <button class="btn btn-combat" onclick="openCombat()">⚔️ MODO COMBATE</button>
   </div>
   
-  <div class="card" style="display:flex;flex-direction:column;gap:10px;animation-delay:.1s;">
-    <div class="sec-title">DÍA RPG &mdash; HÁBITOS</div>
+  <div class="card" style="display:flex;flex-direction:column;gap:10px;">
+    <div class="sec-title">REQUISITOS DIARIOS</div>
 
-    <div id="streakWidget" style="display:block;width:100%;padding:10px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(255,170,0,.12),rgba(255,100,0,.08));border:1px solid rgba(255,150,0,.35);margin-bottom:2px;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div id="streakFire" style="font-size:26px;">🔥</div>
-        <div style="flex:1;">
-          <div style="font-family:Rajdhani,sans-serif;font-size:11px;color:rgba(255,200,100,.7);">RACHA ACTIVA</div>
-          <div id="streakNum" style="font-family:Orbitron,monospace;font-size:20px;font-weight:900;color:#ffaa00;text-shadow:0 0 16px rgba(255,170,0,.8);line-height:1;">0</div>
-          <div style="font-family:Rajdhani,sans-serif;font-size:11px;color:rgba(255,200,100,.6);" id="streakSub">días consecutivos</div>
-        </div>
-        <div id="streakBonusBadge" style="font-family:Orbitron,monospace;font-size:9px;background:rgba(255,170,0,.2);border:1px solid rgba(255,170,0,.4);color:#ffcc44;padding:4px 10px;border-radius:999px;">+0% XP</div>
-      </div>
-    </div>
-    
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div style="position:relative;width:64px;height:64px;flex-shrink:0;">
-        <svg width="64" height="64" viewBox="0 0 64 64" style="transform:rotate(-90deg);">
-          <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="6"/>
-          <circle id="ringArc" cx="32" cy="32" r="26" fill="none" stroke="#8b5cf6" stroke-width="6" stroke-dasharray="163.4" stroke-dashoffset="163.4" stroke-linecap="round" style="transition:stroke-dashoffset .5s cubic-bezier(.16,1,.3,1),stroke .3s ease;"/>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+      <div style="position:relative;width:56px;height:56px;flex-shrink:0;">
+        <svg width="56" height="56" viewBox="0 0 64 64" style="transform:rotate(-90deg);">
+          <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
+          <circle id="ringArc" cx="32" cy="32" r="26" fill="none" stroke="#8b5cf6" stroke-width="6" stroke-dasharray="163.4" stroke-dashoffset="163.4" stroke-linecap="round"/>
         </svg>
-        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
-          <div id="ringPct" style="font-family:Orbitron,monospace;font-size:12px;font-weight:700;color:white;">0%</div>
-          <div style="font-family:Rajdhani,sans-serif;font-size:9px;color:rgba(180,150,255,.7);">HOY</div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <div id="ringPct" style="font-family:Orbitron,monospace;font-size:11px;font-weight:700;">0%</div>
         </div>
       </div>
-      <div style="flex:1;background:linear-gradient(135deg,rgba(52,211,153,.1),rgba(16,185,129,.06));border:1px solid rgba(52,211,153,.25);border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:10px;">
-        <div id="questIcon" style="font-size:20px;flex-shrink:0;">🎯</div>
-        <div style="flex:1;">
-          <div style="font-family:Orbitron,monospace;font-size:8px;color:rgba(52,211,153,.8);letter-spacing:1px;">MISIÓN DIARIA</div>
-          <div id="questDesc" style="font-family:Rajdhani,sans-serif;font-size:12px;color:rgba(180,255,200,.7);margin-top:2px;line-height:1.3;">Completa 3+ hábitos para asegurar racha</div>
-        </div>
-        <div id="questXP" style="font-family:Orbitron,monospace;font-size:11px;color:#34d399;white-space:nowrap;">+5 XP</div>
+      <div style="flex:1;">
+        <div style="font-family:Rajdhani,sans-serif;font-size:13px;color:rgba(255,200,100,.8);">Racha Activa: <span id="streakNum" style="font-weight:700;color:#ffaa00;">0</span> días</div>
+        <div style="font-family:Rajdhani,sans-serif;font-size:11px;color:rgba(200,180,255,.5);">Misión: Completa 3+ tareas para evitar penalizaciones.</div>
       </div>
     </div>
 
     <button class="hbtn" id="hb0" onclick="toggleHabit(0)">
       <span style="font-size:24px;">🏋️‍♂️</span>
-      <div style="flex:1;"><div style="font-size:15px;font-weight:700;">Gimnasio</div><div style="font-size:11px;color:rgba(255,150,150,.6);margin-top:2px;">+8 XP &middot; -3 si no</div></div>
-      <span style="font-size:13px;min-width:32px;text-align:right;font-family:'Orbitron',monospace;" id="hcheck0">+8</span>
+      <div style="flex:1;"><div style="font-size:15px;font-weight:700;">Gimnasio</div><div style="font-size:11px;color:rgba(255,150,150,.6);">+8 XP &middot; FUE</div></div>
+      <span style="font-size:13px;font-family:'Orbitron',monospace;" id="hcheck0">+8</span>
     </button>
     <button class="hbtn" id="hb1" onclick="toggleHabit(1)">
       <span style="font-size:24px;">📚</span>
-      <div style="flex:1;"><div style="font-size:15px;font-weight:700;">Estudiar +3h</div><div style="font-size:11px;color:rgba(100,160,255,.6);margin-top:2px;">+10 XP &middot; -3 si no</div></div>
-      <span style="font-size:13px;min-width:32px;text-align:right;font-family:'Orbitron',monospace;" id="hcheck1">+10</span>
+      <div style="flex:1;"><div style="font-size:15px;font-weight:700;">Estudiar +3h</div><div style="font-size:11px;color:rgba(100,160,255,.6);">+10 XP &middot; INT</div></div>
+      <span style="font-size:13px;font-family:'Orbitron',monospace;" id="hcheck1">+10</span>
     </button>
     <button class="hbtn" id="hb2" onclick="toggleHabit(2)">
       <span style="font-size:24px;">📵</span>
-      <div style="flex:1;"><div style="font-size:15px;font-weight:700;">Móvil -1h</div><div style="font-size:11px;color:rgba(100,220,180,.6);margin-top:2px;">+6 XP &middot; -3 si no</div></div>
-      <span style="font-size:13px;min-width:32px;text-align:right;font-family:'Orbitron',monospace;" id="hcheck2">+6</span>
+      <div style="flex:1;"><div style="font-size:15px;font-weight:700;">Móvil -1h</div><div style="font-size:11px;color:rgba(100,220,180,.6);">+6 XP &middot; FOC</div></div>
+      <span style="font-size:13px;font-family:'Orbitron',monospace;" id="hcheck2">+6</span>
     </button>
     <button class="hbtn" id="hb3" onclick="toggleHabit(3)">
       <span style="font-size:24px;">🧠</span>
-      <div style="flex:1;"><div style="font-size:15px;font-weight:700;">Deep Work 1h30</div><div style="font-size:11px;color:rgba(200,150,255,.6);margin-top:2px;">+8 XP &middot; -3 si no</div></div>
-      <span style="font-size:13px;min-width:32px;text-align:right;font-family:'Orbitron',monospace;" id="hcheck3">+8</span>
+      <div style="flex:1;"><div style="font-size:15px;font-weight:700;">Deep Work 1h30</div><div style="font-size:11px;color:rgba(200,150,255,.6);">+8 XP &middot; DIS</div></div>
+      <span style="font-size:13px;font-family:'Orbitron',monospace;" id="hcheck3">+8</span>
     </button>
-    <button class="hbtn" id="hb4" onclick="toggleHabit(4)" style="border-color:rgba(80,220,120,.2);">
+    <button class="hbtn" id="hb4" onclick="toggleHabit(4)">
       <span style="font-size:24px;">🚭</span>
-      <div style="flex:1;"><div style="font-size:15px;font-weight:700;">No Touch</div><div style="font-size:11px;color:rgba(80,220,120,.6);margin-top:2px;">+2 XP &middot; sin penalización</div></div>
-      <span style="font-size:13px;min-width:32px;text-align:right;font-family:'Orbitron',monospace;" id="hcheck4">+2</span>
+      <div style="flex:1;"><div style="font-size:15px;font-weight:700;">No Vicios</div><div style="font-size:11px;color:rgba(80,220,120,.6);">+2 XP &middot; DIS</div></div>
+      <span style="font-size:13px;font-family:'Orbitron',monospace;" id="hcheck4">+2</span>
     </button>
     <div class="divider"></div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div class="font-raj" style="font-size:15px;color:rgba(180,150,255,.7);">Neto: <b id="todayXP" style="color:white;">0</b> XP</div>
+    <div style="display:flex;align-items:center;">
+      <div class="font-raj" style="font-size:15px;">Balance Neto: <b id="todayXP" style="color:#a78bfa;">0</b> XP</div>
       <button class="btn" id="commitBtn" style="margin-left:auto;font-size:10px;" onclick="commitDay()">CERRAR DÍA</button>
     </div>
-    <div class="font-raj" style="font-size:13px;color:rgba(180,150,255,.6);line-height:1.6;" id="msgBox">Marca los hábitos completados y cierra el día de hoy.</div>
   </div>
 </div>
 
-<div class="card" style="margin-bottom:14px;animation-delay:.15s;">
-  <div class="sec-title">progresión XP &mdash; Historial Logros</div>
+<div class="card" style="margin-bottom:14px;">
+  <div class="sec-title">HISTORIAL DE PROGRESIÓN</div>
   <div class="chart-wrap"><canvas id="progressChart"></canvas></div>
 </div>
-<div style="display:flex;justify-content:center;padding-bottom:8px;">
-  <button class="btn-reset" onclick="resetAll()">reiniciar progreso completo</button>
+<div style="display:flex;justify-content:center;">
+  <button class="btn-reset" onclick="resetAll()">Reiniciar Base de Datos</button>
 </div>
-
-<div id="audioUnlockBanner" onclick="unlockAudioEngine()">🎵 ACTIVAR SONIDOS (WebAudio iPhone)</div>
 
 <script>
 // ==========================================
-// 1. MOTOR DE AUDIO COMPATIBLE CON IPHONE (WebAudio API)
+// 1. MOTOR DE AUDIO ULTRACOMPATIBLE CON SAFARI (iOS)
 // ==========================================
-class WebAudioEngine {
+class SafariAudioEngine {
   constructor() {
     this.ctx = null;
-    this.unlocked = false;
   }
 
   init() {
@@ -400,8 +312,15 @@ class WebAudioEngine {
     try {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       this.ctx = new AudioContextClass();
+      
+      // Crear un buffer silencioso instantáneo para desbloquear canales de audio de iOS
+      const buffer = this.ctx.createBuffer(1, 1, 22050);
+      const source = this.ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(this.ctx.destination);
+      source.start(0);
     } catch(e) {
-      console.error("WebAudio API no soportada", e);
+      console.error("WebAudio falló en inicialización:", e);
     }
   }
 
@@ -411,92 +330,73 @@ class WebAudioEngine {
     }
   }
 
-  playTone(freq, type, duration, volume = 0.1, freqEnd = null) {
+  play(freq, type, duration, volume = 0.1, endFreq = null) {
     this.init();
     this.resume();
     if (!this.ctx) return;
 
+    // Forzar lectura limpia del tiempo de reloj actual de Safari
+    const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
-    const gainNode = this.ctx.createGain();
+    const gain = this.ctx.createGain();
 
     osc.type = type;
-    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-    if (freqEnd !== null) {
-      osc.frequency.exponentialRampToValueAtTime(freqEnd, this.ctx.currentTime + duration);
+    osc.frequency.setValueAtTime(freq, now);
+    
+    if (endFreq !== null) {
+      osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
     }
 
-    gainNode.gain.setValueAtTime(volume, this.ctx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+    gain.gain.setValueAtTime(volume, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
-    osc.connect(gainNode);
-    gainNode.connect(this.ctx.destination);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
 
-    osc.start();
-    osc.stop(this.ctx.currentTime + duration);
+    osc.start(now);
+    osc.stop(now + duration);
   }
 
-  playClick() {
-    this.playTone(600, 'sine', 0.06, 0.15);
-  }
-
-  playXp() {
-    this.playTone(523.25, 'triangle', 0.08, 0.2); // C5
-    setTimeout(() => this.playTone(659.25, 'triangle', 0.1, 0.2), 60); // E5
-  }
-
-  playCombat() {
-    // Ruido/impacto de combate mediante caídas rápidas de pitch
-    this.playTone(180, 'sawtooth', 0.15, 0.3, 40);
-  }
-
-  playLevelUp() {
-    // Arpegio triunfal ascendente
-    const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
-    notes.forEach((f, i) => {
-      setTimeout(() => this.playTone(f, 'sine', 0.3, 0.2), i * 70);
+  click() { this.play(580, 'sine', 0.05, 0.15); }
+  xp() { this.play(440, 'triangle', 0.08, 0.2, 880); }
+  combat() { this.play(150, 'sawtooth', 0.2, 0.25, 40); }
+  levelup() {
+    const arr = [261, 329, 392, 523, 659, 783, 1046];
+    arr.forEach((f, i) => {
+      setTimeout(() => this.play(f, 'sine', 0.25, 0.2), i * 65);
     });
   }
-
-  playVictory() {
-    const sequence = [523.25, 659.25, 783.99, 523.25, 1046.50];
-    sequence.forEach((f, i) => {
-      setTimeout(() => this.playTone(f, 'triangle', 0.25, 0.2), i * 110);
-    });
-  }
-
-  playDefeat() {
-    // Caída disonante hacia frecuencias bajas
-    this.playTone(220, 'sawtooth', 0.5, 0.3, 50);
-  }
+  victory() { this.play(600, 'triangle', 0.3, 0.2, 900); }
+  defeat() { this.play(200, 'sawtooth', 0.4, 0.3, 60); }
 }
 
-const audio = new WebAudioEngine();
+const audio = new SafariAudioEngine();
 
-function unlockAudioEngine() {
+function startAppWithAudio() {
   audio.init();
-  audio.playClick();
-  const banner = document.getElementById('audioUnlockBanner');
-  if (banner) banner.style.display = 'none';
-  audio.unlocked = true;
+  audio.click();
+  document.getElementById('safariAudioOverlay').style.display = 'none';
 }
 
-// Intentar desbloqueo pasivo mediante interacción estándar de iPhone
-document.addEventListener('click', () => {
-  if (audio.ctx && audio.ctx.state === 'suspended') {
-    audio.ctx.resume();
-  }
-}, { once: false });
-
-
 // ==========================================
-// 2. CONFIGURACIÓN E HISTORIAL DE JUEGO (Estado Persistente)
+// 2. CONFIGURACIÓN Y ESTADOS EVOLUTIVOS (7 NIVELES)
 // ==========================================
+const TIERS = [
+  { id: 1, name: "MENDIGO SINFÍN", desc: "Cuerpo demacrado, harapos rotos, sin blanca.", color: "#78716c" },
+  { id: 2, name: "CIUDADANO COMÚN", desc: "Complexión estándar, ropa limpia, recuperando vitalidad.", color: "#38bdf8" },
+  { id: 3, name: "RECLUTA ENTRENADO", desc: "Músculos firmes, chaleco de cuero, porta un bastón.", color: "#a3e635" },
+  { id: 4, name: "GUERRERO DE ÉLITE", desc: "Fuerte y ancho, armadura de hierro, espada de acero.", color: "#fb923c" },
+  { id: 5, name: "CABALLERO CIBERNÉTICO", desc: "Coraza de polímero, visor láser purpúreo, katana de energía.", color: "#c084fc" },
+  { id: 6, name: "PALADÍN SUPREMO", desc: "Hombros colosales, placas áureas, espadón resplandeciente.", color: "#fde047" },
+  { id: 7, name: "DEIDAD ABSOLUTA", desc: "Ser de energía pura, corona de plasma, aura cósmica.", color: "#4ade80" }
+];
+
 const HABITS_CONFIG = [
   { id: 0, name: "Gimnasio", xp: 8, penalty: -3, stat: "fue" },
   { id: 1, name: "Estudiar +3h", xp: 10, penalty: -3, stat: "int" },
   { id: 2, name: "Móvil -1h", xp: 6, penalty: -3, stat: "foc" },
   { id: 3, name: "Deep Work 1h30", xp: 8, penalty: -3, stat: "dis" },
-  { id: 4, name: "No Touch", xp: 2, penalty: 0, stat: "dis" }
+  { id: 4, name: "No Vicios", xp: 2, penalty: 0, stat: "dis" }
 ];
 
 let state = {
@@ -504,163 +404,96 @@ let state = {
   level: 1,
   stats: { fue: 1, int: 1, foc: 1, dis: 1 },
   streak: 0,
-  history: [], // Array de { date: "YYYY-MM-DD", xp: totalXpActual }
+  history: [],
   habitsChecked: [false, false, false, false, false],
-  lastManualCloseDate: "", // YYYY-MM-DD cuando cerró manualmente
-  currentTrackingDate: ""   // Último día natural evaluado por la app
+  lastManualCloseDate: "",
+  currentTrackingDate: ""
 };
 
-// Obtiene la fecha local estructurada como YYYY-MM-DD sin desajustes horarios
 function getLocalDateString() {
   const d = new Date();
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 function loadState() {
-  const saved = localStorage.getItem('habitos_rpg_ultra_state');
+  const saved = localStorage.getItem('habitos_rpg_v2_state');
   const today = getLocalDateString();
-  
   if (saved) {
-    try {
-      state = JSON.parse(saved);
-    } catch(e) {
-      console.error("Error cargando estado corrupto, inicializando de cero.");
-    }
+    try { state = JSON.parse(saved); } catch(e) {}
   }
-
-  // Si es la primera ejecución completa
-  if (!state.currentTrackingDate) {
-    state.currentTrackingDate = today;
-  }
-
-  // PROCESAR CAMBIOS DE DÍA TRASNOCHADOS (Auto-cierre a media noche)
+  if (!state.currentTrackingDate) state.currentTrackingDate = today;
   evaluateDayRollovers();
-
   saveState();
   updateUI();
 }
 
 function saveState() {
-  localStorage.setItem('habitos_rpg_ultra_state', JSON.stringify(state));
+  localStorage.setItem('habitos_rpg_v2_state', JSON.stringify(state));
 }
 
-
-// ==========================================
-// 3. LOGICA REESTRUCTURADA DE CIERRE DIARIO Y AUTO-RESET
-// ==========================================
 function evaluateDayRollovers() {
   const todayStr = getLocalDateString();
-  
-  // Mientras la fecha guardada sea anterior a hoy, avanzamos procesando cierres automáticos pendientes
   while (state.currentTrackingDate !== todayStr) {
-    const targetDate = state.currentTrackingDate;
-    
-    // Si no se cerró manualmente en ese día guardado, ejecutamos el Auto-Cierre Obligatorio
-    if (state.lastManualCloseDate !== targetDate) {
-      executeAutoCloseForDate(targetDate);
+    if (state.lastManualCloseDate !== state.currentTrackingDate) {
+      executeAutoCloseForDate(state.currentTrackingDate);
     }
-    
-    // Avanzar el tracking un día hacia adelante de forma limpia
-    state.currentTrackingDate = advanceOneDayString(targetDate);
-    
-    // Al pasar a un nuevo día independiente, se resetean limpiamente los interruptores
+    state.currentTrackingDate = advanceOneDayString(state.currentTrackingDate);
     state.habitsChecked = [false, false, false, false, false];
   }
 }
 
-// Avanza una cadena de fecha YYYY-MM-DD exactamente un día natural
 function advanceOneDayString(dateStr) {
   const parts = dateStr.split('-');
   const dt = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
   dt.setDate(dt.getDate() + 1);
-  const y = dt.getFullYear();
-  const m = String(dt.getMonth() + 1).padStart(2, '0');
-  const d = String(dt.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
+  return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
 }
 
-// Ejecución ciega del cierre de día automático (sin penalización doble ni reinicio de XP acumulada)
 function executeAutoCloseForDate(dateStr) {
   let netXP = 0;
   let completedCount = 0;
-
   HABITS_CONFIG.forEach((h, idx) => {
     if (state.habitsChecked[idx]) {
-      netXP += h.xp;
-      completedCount++;
-      // Incremento sutil a los atributos correspondientes
+      netXP += h.xp; completedCount++;
       state.stats[h.stat] = (state.stats[h.stat] || 1) + 0.1;
     } else {
-      netXP += h.penalty; // Aplica los -3 XP correspondientes
+      netXP += h.penalty;
     }
   });
-
-  // Evaluación de la misión diaria (Mantener Racha)
-  if (completedCount >= 3) {
-    netXP += 5; // Misión completada
-    state.streak++;
-  } else {
-    state.streak = 0; // Racha rota por no cumplir hábitos mínimos
-  }
-
-  // Modificación neta de la bolsa global de XP garantizando continuidad
+  if (completedCount >= 3) { netXP += 5; state.streak++; } else { state.streak = 0; }
   state.xp = Math.max(0, state.xp + netXP);
-  
-  // Procesar escalado de niveles dinámicos
-  while (state.xp >= getXpNeeded(state.level)) {
-    state.xp -= getXpNeeded(state.level);
-    state.level++;
-  }
-
-  // Registro histórico ininterrumpido para los gráficos 30 días
-  state.history.push({
-    date: dateStr,
-    xp: state.xp,
-    level: state.level
-  });
+  while (state.xp >= getXpNeeded(state.level)) { state.xp -= getXpNeeded(state.level); state.level++; }
+  state.history.push({ date: dateStr, xp: state.xp, level: state.level });
   if (state.history.length > 30) state.history.shift();
 }
 
-// Cierre Manual desencadenado por el usuario (Solo una vez por día natural)
 function commitDay() {
-  audio.playClick();
+  audio.click();
   const todayStr = getLocalDateString();
+  if (state.lastManualCloseDate === todayStr) return;
 
-  if (state.lastManualCloseDate === todayStr) {
-    showToast("¡Ya has cerrado el día de hoy!");
-    return;
-  }
-
-  // Ejecutamos la lógica de cálculo directamente sobre el día actual
   let netXP = 0;
   let completedCount = 0;
-
   HABITS_CONFIG.forEach((h, idx) => {
     if (state.habitsChecked[idx]) {
-      netXP += h.xp;
-      completedCount++;
-      state.stats[h.stat] = (state.stats[h.stat] || 1) + 1; // Recompensa directa manual completa
+      netXP += h.xp; completedCount++;
+      state.stats[h.stat] = (state.stats[h.stat] || 1) + 1;
     } else {
       netXP += h.penalty;
     }
   });
 
   if (completedCount >= 3) {
-    netXP += 5;
-    state.streak++;
-    showToast("🔥 ¡Misión cumplida! Racha aumentada.");
-    audio.playVictory();
+    netXP += 5; state.streak++;
+    showToast("🔥 Racha asegurada y bono guardado!");
+    audio.victory();
   } else {
     state.streak = 0;
-    showToast("💀 Día cerrado sin cumplir la misión.");
-    audio.playDefeat();
+    showToast("💀 No completaste los hábitos mínimos.");
+    audio.defeat();
   }
 
   state.xp = Math.max(0, state.xp + netXP);
-  
   let leveledUp = false;
   while (state.xp >= getXpNeeded(state.level)) {
     state.xp -= getXpNeeded(state.level);
@@ -669,423 +502,282 @@ function commitDay() {
   }
 
   if (leveledUp) {
-    audio.playLevelUp();
-    triggerLevelUpAnimation();
+    audio.levelup();
+    document.getElementById('heroCanvas').classList.add('hero-levelup');
+    setTimeout(() => document.getElementById('heroCanvas').classList.remove('hero-levelup'), 600);
   }
 
-  // Bloquear el día actual
   state.lastManualCloseDate = todayStr;
-  
-  state.history.push({
-    date: todayStr,
-    xp: state.xp,
-    level: state.level
-  });
-  if (state.history.length > 30) state.history.shift();
-
+  state.history.push({ date: todayStr, xp: state.xp, level: state.level });
   saveState();
   updateUI();
 }
 
-// Monitoreo constante en segundo plano (Auto-cierre exacto al llegar la medianoche en vivo)
-setInterval(() => {
-  const todayStr = getLocalDateString();
-  if (state.currentTrackingDate && state.currentTrackingDate !== todayStr) {
-    evaluateDayRollovers();
-    saveState();
-    updateUI();
-    showToast("🕒 Medianoche alcanzada. Nuevo día iniciado.");
-  }
-}, 30000); // Comprobación cada 30 segundos
-
-
 // ==========================================
-// 4. SISTEMA DE COMBATES Y REQUISITOS
+// 3. MOTOR GRÁFICO EVOLUTIVO DEL PERSONAJE
 // ==========================================
-function openCombat() {
-  audio.playClick();
-  document.getElementById('combatModal').classList.add('show');
-  
-  // Renderizar estadísticas requeridas dinámicamente
-  const statsDiv = document.getElementById('combatStats');
-  statsDiv.innerHTML = `
-    <span class="level-badge" style="background:rgba(239,68,68,0.1)">FUE ${Math.floor(state.stats.fue)}</span>
-    <span class="level-badge" style="background:rgba(167,139,250,0.1)">INT ${Math.floor(state.stats.int)}</span>
-    <span class="level-badge" style="background:rgba(52,211,153,0.1)">FOC ${Math.floor(state.stats.foc)}</span>
-    <span class="level-badge" style="background:rgba(251,191,36,0.1)">DIS ${Math.floor(state.stats.dis)}</span>
-  `;
-
-  // Calcular requisitos basados en el nivel del jugador actual
-  document.getElementById('e0req').innerText = Math.floor(state.level * 1.2);
-  document.getElementById('e1req').innerText = Math.floor(state.level * 1.5);
-  document.getElementById('e2req').innerText = Math.floor(state.level * 1.0);
-
-  document.getElementById('combatArena').style.display = 'block';
-}
-
-function closeCombat() {
-  audio.playClick();
-  document.getElementById('combatModal').classList.remove('show');
-}
-
-function fightEnemy(type) {
-  audio.playCombat();
-  let playerStat = 0;
-  let requiredStat = 0;
-  let enemyName = "";
-  let rewardXP = 0;
-  let emoji = "";
-
-  if (type === 0) {
-    playerStat = state.stats.int;
-    requiredStat = Math.floor(state.level * 1.2);
-    enemyName = "Mago Psicólogo";
-    rewardXP = 15;
-    emoji = "🧙‍♂️";
-  } else if (type === 1) {
-    playerStat = state.stats.fue;
-    requiredStat = Math.floor(state.level * 1.5);
-    enemyName = "Gigante Salvaje";
-    rewardXP = 20;
-    emoji = "👹";
-  } else {
-    playerStat = state.stats.foc;
-    requiredStat = Math.floor(state.level * 1.0);
-    enemyName = "Ser Misterioso";
-    rewardXP = 12;
-    emoji = "👁️";
-  }
-
-  const resultModal = document.getElementById('combatResult');
-  const resultEmoji = document.getElementById('combatResultEmoji');
-  const resultTitle = document.getElementById('combatResultTitle');
-  const resultMsg = document.getElementById('combatResultMsg');
-
-  if (playerStat >= requiredStat) {
-    // Victoria
-    audio.playVictory();
-    state.xp += rewardXP;
-    
-    let leveledUp = false;
-    while (state.xp >= getXpNeeded(state.level)) {
-      state.xp -= getXpNeeded(state.level);
-      state.level++;
-      leveledUp = true;
-    }
-    if (leveledUp) audio.playLevelUp();
-
-    resultEmoji.innerText = "🏆";
-    resultTitle.innerText = "¡VICTORIA!";
-    resultMsg.innerText = `Has derrotado al ${enemyName}.\nRecompensa: +${rewardXP} XP obtenidos de inmediato.`;
-    
-    // Spawn de partículas festivas
-    createExplosion(window.innerWidth / 2, window.innerHeight / 2, '#34d399');
-  } else {
-    // Derrota
-    audio.playDefeat();
-    resultEmoji.innerText = "💀";
-    resultTitle.innerText = "DERROTA";
-    resultMsg.innerText = `Tus estadísticas actuales no bastaron para hacer frente al ${enemyName}.\nRequisito: Atributo superior a ${requiredStat}.`;
-    
-    document.getElementById('heroCanvas').classList.add('hero-hurt');
-    setTimeout(() => {
-      document.getElementById('heroCanvas').classList.remove('hero-hurt');
-    }, 500);
-  }
-
-  saveState();
-  updateUI();
-  resultModal.classList.add('show');
-}
-
-function closeCombatResult() {
-  audio.playClick();
-  document.getElementById('combatResult').classList.remove('show');
-}
-
-
-// ==========================================
-// 5. RENDIMIENTO GRÁFICO, COMPONENTES Y RENDERIZADO
-// ==========================================
-function getXpNeeded(lvl) {
-  return lvl * 20 + 20;
-}
-
-function toggleHabit(idx) {
-  const todayStr = getLocalDateString();
-  if (state.lastManualCloseDate === todayStr) {
-    showToast("Día bloqueado. No puedes cambiar hábitos.");
-    return;
-  }
-  
-  audio.playXp();
-  state.habitsChecked[idx] = !state.habitsChecked[idx];
-  saveState();
-  updateUI();
-}
-
-function updateUI() {
-  const todayStr = getLocalDateString();
-  const isClosed = state.lastManualCloseDate === todayStr;
-
-  // Actualizar textos principales
-  document.getElementById('levelLabel').innerText = `RANGO ULTRA`;
-  document.getElementById('heroBadge').innerText = `NIVEL ${state.level}`;
-  
-  const reqXp = getXpNeeded(state.level);
-  document.getElementById('xpLabel').innerText = `${Math.floor(state.xp)} / ${reqXp}`;
-  
-  const pctXp = Math.min(100, (state.xp / reqXp) * 100);
-  document.getElementById('xpBar').style.width = `${pctXp}%`;
-
-  // Atributos numéricos redondeados
-  document.getElementById('statStr').innerText = `FUE ${Math.floor(state.stats.fue || 1)}`;
-  document.getElementById('statInt').innerText = `INT ${Math.floor(state.stats.int || 1)}`;
-  document.getElementById('statFoc').innerText = `FOC ${Math.floor(state.stats.foc || 1)}`;
-  document.getElementById('statDis').innerText = `DIS ${Math.floor(state.stats.dis || 1)}`;
-
-  // Widget Racha
-  document.getElementById('streakNum').innerText = state.streak;
-  const bonus = state.streak * 2;
-  document.getElementById('streakBonusBadge').innerText = `+${bonus}% XP`;
-
-  // Renderizar estados de botones de hábitos
-  let completed = 0;
-  let expectedNet = 0;
-  HABITS_CONFIG.forEach((h, idx) => {
-    const btn = document.getElementById(`hb${idx}`);
-    const checkSpan = document.getElementById(`hcheck${idx}`);
-    
-    if (state.habitsChecked[idx]) {
-      btn.classList.add('completed');
-      checkSpan.innerText = "✓";
-      expectedNet += h.xp;
-      completed++;
-    } else {
-      btn.classList.remove('completed');
-      checkSpan.innerText = `+${h.xp}`;
-      expectedNet += h.penalty;
-    }
-  });
-
-  // Misión diaria porcentaje circulo
-  const pctRing = Math.min(100, Math.floor((completed / 5) * 100));
-  document.getElementById('ringPct').innerText = `${pctRing}%`;
-  const offset = 163.4 - (163.4 * pctRing) / 100;
-  document.getElementById('ringArc').style.strokeDashoffset = offset;
-
-  document.getElementById('todayXP').innerText = expectedNet;
-
-  // Ajustes del botón Cerrar Día
-  const commitBtn = document.getElementById('commitBtn');
-  if (isClosed) {
-    commitBtn.innerText = "CERRADO";
-    commitBtn.disabled = true;
-    document.getElementById('msgBox').innerText = "Has consolidado la progresión de este ciclo de forma segura.";
-  } else {
-    commitBtn.innerText = "CERRAR DÍA";
-    commitBtn.disabled = false;
-    document.getElementById('msgBox').innerText = "Marca tus hitos completados antes de consolidar el día actual.";
-  }
-
-  // Re-dibujar gráficos interactivos de Canvas nativos
-  drawHero();
-  drawChart();
-}
-
-// Dibujo procedimental del Avatar 8-Bits en Canvas
 function drawHero() {
   const canvas = document.getElementById('heroCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const bobbing = Math.sin(Date.now() * 0.004) * 6;
+  const tierIndex = Math.min(7, state.level) - 1;
+  const tier = TIERS[tierIndex];
+  const bobbing = Math.sin(Date.now() * 0.004) * (state.level === 1 ? 3 : 6);
 
-  // Cuerpo / Armadura
-  ctx.fillStyle = "#4c1d95";
-  ctx.fillRect(60, 130 + bobbing, 100, 90);
-  ctx.fillStyle = "#6d28d9";
-  ctx.fillRect(75, 140 + bobbing, 70, 80);
+  // Aura cósmica (Niveles 6 y 7)
+  if (state.level >= 6) {
+    ctx.save();
+    let grad = ctx.createRadialGradient(110, 120 + bobbing, 10, 110, 120 + bobbing, 90);
+    grad.addColorStop(0, state.level === 7 ? 'rgba(74,222,128,0.4)' : 'rgba(253,224,71,0.3)');
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(110, 120 + bobbing, 90, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
 
-  // Hombreras Neo-Glow
-  ctx.fillStyle = "#a78bfa";
-  ctx.fillRect(45, 135 + bobbing, 20, 30);
-  ctx.fillRect(155, 135 + bobbing, 20, 30);
+  // Configuración de proporciones según masa y evolución física
+  let bodyWidth = 40 + (tierIndex * 11); // Crece de 40px a 106px de ancho
+  let bodyHeight = 65 + (tierIndex * 4);
+  let headSize = 55 + (tierIndex * 2);
 
-  // Rostro / Casco
-  ctx.fillStyle = "#1e1b4b";
-  ctx.fillRect(70, 50 + bobbing, 80, 80);
-  ctx.fillStyle = "#312e81";
-  ctx.fillRect(75, 55 + bobbing, 70, 70);
+  // Coordenadas base centradas
+  let bx = 110 - bodyWidth / 2;
+  let by = 140 + bobbing;
+  let hx = 110 - headSize / 2;
+  let hy = by - headSize + 10;
 
-  // Visor Láser brillante
-  ctx.fillStyle = "#ef4444";
-  ctx.shadowColor = "#ef4444";
-  ctx.shadowBlur = 10;
-  ctx.fillRect(85, 75 + bobbing, 50, 12);
-  ctx.shadowBlur = 0;
+  // 1. Dibujo del Armamento Trasero (Evolución visual de armas)
+  ctx.fillStyle = "#6b7280";
+  if (state.level === 3) {
+    // Bastón de madera humilde
+    ctx.fillStyle = "#78350f";
+    ctx.fillRect(bx + bodyWidth - 5, by - 30, 8, 100);
+  } else if (state.level === 4) {
+    // Espada normal de acero
+    ctx.fillRect(bx + bodyWidth - 4, by - 40, 6, 110);
+    ctx.fillStyle = "#b45309"; ctx.fillRect(bx + bodyWidth - 12, by + 50, 22, 6);
+  } else if (state.level === 5) {
+    // Katana Cyber de Energía
+    ctx.fillStyle = "#c084fc";
+    ctx.shadowColor = "#c084fc"; ctx.shadowBlur = 10;
+    ctx.fillRect(bx + bodyWidth - 4, by - 45, 6, 120);
+    ctx.shadowBlur = 0;
+  } else if (state.level >= 6) {
+    // Mandoble titánico dorado / plasma
+    ctx.fillStyle = tier.color;
+    if (state.level === 7) { ctx.shadowColor = "#4ade80"; ctx.shadowBlur = 15; }
+    ctx.fillRect(bx - 15, by - 60, 12, 150);
+    ctx.fillRect(bx + bodyWidth + 3, by - 60, 12, 150);
+    ctx.shadowBlur = 0;
+  }
 
-  // Espada en la espalda
-  ctx.fillStyle = "#9ca3af";
-  ctx.fillRect(160, 40 + bobbing, 10, 100);
-  ctx.fillStyle = "#f59e0b";
-  ctx.fillRect(152, 110 + bobbing, 26, 10);
+  // 2. Dibujo del Cuerpo / Torso
+  if (state.level === 1) {
+    // Yonki / Delgado / Pobre: Torso esquelético, color marrón sucio/gris
+    ctx.fillStyle = "#44403c";
+    ctx.fillRect(bx, by, bodyWidth, bodyHeight);
+    // Costillas marcadas visualmente
+    ctx.fillStyle = "#292524";
+    ctx.fillRect(bx + 4, by + 15, bodyWidth - 8, 4);
+    ctx.fillRect(bx + 4, by + 25, bodyWidth - 8, 4);
+  } else {
+    // Trajes y armaduras progresivamente superiores
+    ctx.fillStyle = tier.color;
+    ctx.fillRect(bx, by, bodyWidth, bodyHeight);
+    
+    // Detalles internos de la armadura / Ropa mejorada
+    ctx.fillStyle = "rgba(0,0,0,0.15)";
+    ctx.fillRect(bx + (bodyWidth * 0.2), by, bodyWidth * 0.6, bodyHeight);
+  }
+
+  // Hombreras Gigantes (Niveles superiores 4, 5, 6, 7)
+  if (state.level >= 4) {
+    ctx.fillStyle = state.level === 4 ? "#9ca3af" : tier.color;
+    ctx.fillRect(bx - 12, by - 4, 16, 22);
+    ctx.fillRect(bx + bodyWidth - 4, by - 4, 16, 22);
+  }
+
+  // 3. Rostro y Cabeza
+  if (state.level === 1) {
+    // Rostro pálido grisáceo/demacrado
+    ctx.fillStyle = "#78716c";
+    ctx.fillRect(hx, hy, headSize, headSize);
+    // Ojos hundidos y cansados (píxeles rojos/negros apagados)
+    ctx.fillStyle = "#7f1d1d";
+    ctx.fillRect(hx + 10, hy + 20, 8, 8);
+    ctx.fillRect(hx + headSize - 18, hy + 20, 8, 8);
+  } else if (state.level === 2) {
+    // Ciudadano normal estándar
+    ctx.fillStyle = "#fbcfe8";
+    ctx.fillRect(hx, hy, headSize, headSize);
+    ctx.fillStyle = "#1e3a8a"; // Ojos normales
+    ctx.fillRect(hx + 12, hy + 18, 6, 6);
+    ctx.fillRect(hx + headSize - 18, hy + 18, 6, 6);
+  } else {
+    // Cascos y visores tecnológicos avanzados
+    ctx.fillStyle = "#1e1b4b";
+    ctx.fillRect(hx, hy, headSize, headSize);
+    ctx.fillStyle = tier.color;
+    ctx.fillRect(hx + 4, hy + 4, headSize - 8, headSize - 8);
+
+    // Visores brillantes
+    ctx.fillStyle = state.level === 5 ? "#22d3ee" : (state.level === 6 ? "#f59e0b" : "#ef4444");
+    if (state.level >= 5) {
+      ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 8;
+    }
+    ctx.fillRect(hx + 10, hy + 20, headSize - 20, 10);
+    ctx.shadowBlur = 0;
+  }
+
+  // Corona del Infinito para el Nivel Máximo (7)
+  if (state.level === 7) {
+    ctx.fillStyle = "#fde047";
+    ctx.beginPath();
+    ctx.moveTo(hx, hy - 2);
+    ctx.lineTo(hx + 10, hy - 16);
+    ctx.lineTo(hx + (headSize / 2), hy - 4);
+    ctx.lineTo(hx + headSize - 10, hy - 16);
+    ctx.lineTo(hx + headSize, hy - 2);
+    ctx.closePath();
+    ctx.fill();
+  }
 }
 
-// Animación cíclica para el renderizado del Héroe flotante
-setInterval(drawHero, 50);
+setInterval(drawHero, 60);
 
-// Renderizador del Gráfico de Historial Nativo (Sin librerías externas pesadas)
+// ==========================================
+// 4. CONTROLADORES, COMBATE E HISTORIAL
+// ==========================================
+function openCombat() {
+  audio.click();
+  document.getElementById('combatModal').classList.add('show');
+  const statsDiv = document.getElementById('combatStats');
+  statsDiv.innerHTML = `
+    <span class="level-badge" style="background:rgba(239,68,68,0.1)">FUE ${Math.floor(state.stats.fue)}</span>
+    <span class="level-badge" style="background:rgba(167,139,250,0.1)">INT ${Math.floor(state.stats.int)}</span>
+    <span class="level-badge" style="background:rgba(52,211,153,0.1)">FOC ${Math.floor(state.stats.foc)}</span>
+  `;
+  document.getElementById('e0req').innerText = Math.floor(state.level * 1.2);
+  document.getElementById('e1req').innerText = Math.floor(state.level * 1.5);
+  document.getElementById('e2req').innerText = Math.floor(state.level * 1.0);
+}
+
+function closeCombat() { audio.click(); document.getElementById('combatModal').classList.remove('show'); }
+
+function fightEnemy(type) {
+  audio.combat();
+  let statVal = 0, reqVal = 0, name = "", xpReward = 0, emoji = "";
+  if (type === 0) { statVal = state.stats.int; reqVal = Math.floor(state.level * 1.2); name = "Mago Psicólogo"; xpReward = 15; emoji = "🧙‍♂️"; }
+  else if (type === 1) { statVal = state.stats.fue; reqVal = Math.floor(state.level * 1.5); name = "Gigante Salvaje"; xpReward = 20; emoji = "👹"; }
+  else { statVal = state.stats.foc; reqVal = Math.floor(state.level * 1.0); name = "Ser Misterioso"; xpReward = 12; emoji = "👁️"; }
+
+  const res = document.getElementById('combatResult');
+  if (statVal >= reqVal) {
+    audio.victory();
+    state.xp += xpReward;
+    let lvlUp = false;
+    while (state.xp >= getXpNeeded(state.level)) { state.xp -= getXpNeeded(state.level); state.level++; lvlUp = true; }
+    if (lvlUp) audio.levelup();
+    document.getElementById('combatResultEmoji').innerText = "🏆";
+    document.getElementById('combatResultTitle').innerText = "VICTORIA";
+    document.getElementById('combatResultMsg').innerText = `Derrotaste a ${name}.\n+${xpReward} XP consolidados.`;
+  } else {
+    audio.defeat();
+    document.getElementById('combatResultEmoji').innerText = "💀";
+    document.getElementById('combatResultTitle').innerText = "DERROTA";
+    document.getElementById('combatResultMsg').innerText = `Tus stats se quedaron cortos.\nNecesitas más entrenamiento diario.`;
+    document.getElementById('heroCanvas').classList.add('hero-hurt');
+    setTimeout(() => document.getElementById('heroCanvas').classList.remove('hero-hurt'), 500);
+  }
+  saveState(); updateUI(); res.classList.add('show');
+}
+
+function closeCombatResult() { audio.click(); document.getElementById('combatResult').classList.remove('show'); }
+function getXpNeeded(l) { return l * 20 + 20; }
+function triggerTap() { audio.click(); }
+
+function toggleHabit(i) {
+  if (state.lastManualCloseDate === getLocalDateString()) { showToast("Día cerrado."); return; }
+  audio.xp();
+  state.habitsChecked[i] = !state.habitsChecked[i];
+  saveState(); updateUI();
+}
+
+function updateUI() {
+  const today = getLocalDateString();
+  const locked = state.lastManualCloseDate === today;
+  const currentTier = TIERS[Math.min(7, state.level) - 1];
+
+  document.getElementById('levelLabel').innerText = `ESTADO: ${currentTier.name}`;
+  document.getElementById('levelLabel').style.color = currentTier.color;
+  document.getElementById('heroBadge').innerText = `NIVEL ${state.level}`;
+
+  const req = getXpNeeded(state.level);
+  document.getElementById('xpLabel').innerText = `${Math.floor(state.xp)} / ${req}`;
+  document.getElementById('xpBar').style.width = `${Math.min(100, (state.xp/req)*100)}%`;
+
+  document.getElementById('statStr').innerText = `FUE ${Math.floor(state.stats.fue)}`;
+  document.getElementById('statInt').innerText = `INT ${Math.floor(state.stats.int)}`;
+  document.getElementById('statFoc').innerText = `FOC ${Math.floor(state.stats.foc)}`;
+  document.getElementById('statDis').innerText = `DIS ${Math.floor(state.stats.dis)}`;
+  document.getElementById('streakNum').innerText = state.streak;
+
+  let comp = 0, net = 0;
+  HABITS_CONFIG.forEach((h, idx) => {
+    const btn = document.getElementById(`hb${idx}`);
+    if (state.habitsChecked[idx]) { btn.classList.add('completed'); comp++; net += h.xp; }
+    else { btn.classList.remove('completed'); net += h.penalty; }
+  });
+
+  document.getElementById('todayXP').innerText = net;
+  const pct = Math.min(100, Math.floor((comp/5)*100));
+  document.getElementById('ringPct').innerText = `${pct}%`;
+  document.getElementById('ringArc').style.strokeDashoffset = 163.4 - (163.4 * pct) / 100;
+
+  const cBtn = document.getElementById('commitBtn');
+  cBtn.disabled = locked;
+  if (locked) cBtn.innerText = "CERRADO";
+  else cBtn.innerText = "CERRAR DÍA";
+
+  drawChart();
+}
+
+function showToast(m) {
+  const t = document.getElementById('toast'); t.innerText = m; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
 function drawChart() {
-  const canvas = document.getElementById('progressChart');
-  if (!canvas) return;
+  const canvas = document.getElementById('progressChart'); if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  
-  // Forzar escalado responsive adaptativo del canvas
-  const rect = canvas.parentNode.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = 200;
+  canvas.width = canvas.parentNode.getBoundingClientRect().width; canvas.height = 200;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Dibujar rejilla base futurista
-  ctx.strokeStyle = "rgba(139,92,246,0.1)";
-  ctx.lineWidth = 1;
-  for (let i = 0; i < canvas.width; i += canvas.width / 6) {
-    ctx.beginPath();
-    ctx.moveTo(i, 0);
-    ctx.lineTo(i, canvas.height);
-    ctx.stroke();
+  const pts = state.history || [];
+  if (pts.length < 2) {
+    ctx.fillStyle = "rgba(255,255,255,0.2)"; ctx.font = "14px Rajdhani";
+    ctx.fillText("Sin datos suficientes en el registro histórico.", 20, 100); return;
   }
-
-  const points = state.history || [];
-  if (points.length < 2) {
-    ctx.fillStyle = "rgba(255,255,255,0.2)";
-    ctx.font = "14px Rajdhani";
-    ctx.fillText("Sin datos suficientes en el registro histórico.", 20, canvas.height / 2);
-    return;
-  }
-
-  // Mapeo dinámico y trazado de línea de tendencia de XP
-  ctx.beginPath();
-  ctx.strokeStyle = "#8b5cf6";
-  ctx.lineWidth = 3;
-  ctx.shadowColor = "rgba(139,92,246,0.5)";
-  ctx.shadowBlur = 12;
-
-  const stepX = canvas.width / (points.length - 1);
-  const maxVal = Math.max(...points.map(p => p.xp), 40);
-
-  points.forEach((p, idx) => {
-    const x = idx * stepX;
-    const y = canvas.height - 20 - ((p.xp / maxVal) * (canvas.height - 40));
-    if (idx === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
+  ctx.beginPath(); ctx.strokeStyle = "#8b5cf6"; ctx.lineWidth = 3;
+  const step = canvas.width / (pts.length - 1);
+  const maxVal = Math.max(...pts.map(p => p.xp), 40);
+  pts.forEach((p, idx) => {
+    const x = idx * step; const y = canvas.height - 20 - ((p.xp/maxVal)*(canvas.height-40));
+    if (idx === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
   });
   ctx.stroke();
-  ctx.shadowBlur = 0;
-}
-
-// Sistema global de Feedback Efímero (Toasts)
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.innerText = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-function triggerLevelUpAnimation() {
-  document.getElementById('heroCanvas').classList.add('hero-levelup');
-  setTimeout(() => {
-    document.getElementById('heroCanvas').classList.remove('hero-levelup');
-  }, 600);
-  showToast("⭐ ¡SUBIDA DE NIVEL ALCANZADA! ⭐");
 }
 
 function resetAll() {
-  if (confirm("¿Estás completamente seguro de borrar todo tu progreso acumulado e historial?")) {
-    localStorage.removeItem('habitos_rpg_ultra_state');
-    state = {
-      xp: 0,
-      level: 1,
-      stats: { fue: 1, int: 1, foc: 1, dis: 1 },
-      streak: 0,
-      history: [],
-      habitsChecked: [false, false, false, false, false],
-      lastManualCloseDate: "",
-      currentTrackingDate: getLocalDateString()
-    };
-    saveState();
-    updateUI();
-    showToast("Progreso reseteado.");
+  if (confirm("¿Reiniciar progreso completo?")) {
+    localStorage.removeItem('habitos_rpg_v2_state');
+    state = { xp: 0, level: 1, stats: { fue: 1, int: 1, foc: 1, dis: 1 }, streak: 0, history: [], habitsChecked: [false,false,false,false,false], lastManualCloseDate: "", currentTrackingDate: getLocalDateString() };
+    saveState(); updateUI();
   }
 }
 
-// ==========================================
-// 6. MOTOR DE PARTÍCULAS CANVAS OPTIMIZADO
-// ==========================================
-const pCanvas = document.getElementById('particleCanvas');
-const pCtx = pCanvas.getContext('2d');
-let particles = [];
-
-function resizeParticleCanvas() {
-  pCanvas.width = window.innerWidth;
-  pCanvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeParticleCanvas);
-resizeParticleCanvas();
-
-class Particle {
-  constructor(x, y, color) {
-    this.x = x;
-    this.y = y;
-    this.vx = (Math.random() - 0.5) * 8;
-    this.vy = (Math.random() - 0.5) * 8 - 3;
-    this.alpha = 1;
-    this.color = color;
-    this.radius = Math.random() * 3 + 2;
-  }
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    this.vy += 0.1; // Gravedad sutil
-    this.alpha -= 0.02;
-  }
-  draw() {
-    pCtx.save();
-    pCtx.globalAlpha = this.alpha;
-    pCtx.fillStyle = this.color;
-    pCtx.beginPath();
-    pCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    pCtx.fill();
-    pCtx.restore();
-  }
-}
-
-function createExplosion(x, y, color) {
-  for (let i = 0; i < 25; i++) {
-    particles.push(new Particle(x, y, color));
-  }
-}
-
-function particleLoop() {
-  pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-  particles = particles.filter(p => p.alpha > 0);
-  particles.forEach(p => {
-    p.update();
-    p.draw();
-  });
-  requestAnimationFrame(particleLoop);
-}
-requestAnimationFrame(particleLoop);
-
-function heroTap(e) {
-  audio.playClick();
-  createExplosion(e.clientX, e.clientY, '#a78bfa');
-}
-
-// Inicialización automática al arrancar la ventana
 window.onload = loadState;
 </script>
 </body>
