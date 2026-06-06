@@ -2033,7 +2033,7 @@ window.closeAnimOverlay=function(){
 
 const oldCommitDay=window.commitDay;
 window.commitDay=function(auto=false){
-  const done=(window.state?.todayChecked||[]).filter(Boolean).length;
+  const done=(state?.todayChecked||[]).filter(Boolean).length;
   const allDone=done===5;
   if(allDone){
     try{
@@ -2043,7 +2043,7 @@ window.commitDay=function(auto=false){
   }else if(done<=1){
     playMp3(_sHorror);
   }else{
-    //playMp3(_sFah);
+    playMp3(_sSuccess);
   }
   return oldCommitDay ? oldCommitDay(auto) : undefined;
 };
