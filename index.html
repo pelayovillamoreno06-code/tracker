@@ -1400,7 +1400,10 @@
         <span class="metric-chip nodata" id="cPantalla">SIN DATOS</span>
       </div>
     </div>
-    <div class="font-raj" id="healthHint" style="font-size:12px;color:rgba(180,150,255,.5);margin-top:10px;text-align:center;">Conecta Scriptable para recibir pasos, sue&ntilde;o y pantalla autom&aacute;ticamente.</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:12px;">
+      <button class="btn" id="pasteHealthBtn" style="font-size:10px;background:linear-gradient(135deg,#0e7490,#0891b2);border-color:rgba(34,211,238,.5);box-shadow:0 4px 16px rgba(34,211,238,.3);" onclick="pasteHealth()">&#128203; PEGAR DATOS DEL ATAJO</button>
+      <div class="font-raj" id="healthHint" style="font-size:12px;color:rgba(180,150,255,.5);text-align:center;line-height:1.5;">Ejecuta el atajo "Salud RPG" (copia los datos)<br>y pulsa el bot&oacute;n para pegarlos aqu&iacute;.</div>
+    </div>
   </div>
 
   <!-- BOSQUE -->
@@ -1707,6 +1710,63 @@
     window.setHealthData = function (pasos, sueno, pantalla) {
       applyHealth({ pasos: parseFloat(pasos), sueno: parseFloat(sueno), pantalla: parseFloat(pantalla) }, false);
     };
+
+    // ===== PEGAR DATOS (portapapeles, para apps de pantalla de inicio) =====
+    function parseHealthText(text) {
+      if (!text) return null;
+      text = String(text).trim();
+      const num = v => { if (v === null || v === undefined) return null; const n = parseFloat(String(v).replace(',', '.')); return isFinite(n) ? n : null; };
+      let out = { pasos: null, sueno: null, pantalla: null };
+      // 1) JSON: {"pasos":9000,"sueno":7.5,"pantalla":1.2}
+      try {
+        const j = JSON.parse(text);
+        if (j && typeof j === 'object') {
+          out.pasos = num(j.pasos ?? j.Pasos ?? j.steps);
+          out.sueno = num(j.sueno ?? j.Sueno ?? j['sue\u00F1o'] ?? j.sleep);
+          out.pantalla = num(j.pantalla ?? j.Pantalla ?? j.screen);
+          if (out.pasos !== null || out.sueno !== null || out.pantalla !== null) return out;
+        }
+      } catch (e) { }
+      // 2) clave=valor o clave: valor (en cualquier orden, separados por &, ; o saltos)
+      const kv = {};
+      text.replace(/(pasos|sueno|sue\u00F1o|pantalla)\s*[=:]\s*([\d.,]+)/gi, (m, k, v) => {
+        k = k.toLowerCase().replace('\u00F1', 'n');
+        kv[k] = v; return m;
+      });
+      if (Object.keys(kv).length) {
+        out.pasos = num(kv.pasos); out.sueno = num(kv.sueno); out.pantalla = num(kv.pantalla);
+        return out;
+      }
+      // 3) tres numeros sueltos en orden: pasos sueno pantalla
+      const nums = text.match(/[\d]+(?:[.,]\d+)?/g);
+      if (nums && nums.length >= 3) {
+        out.pasos = num(nums[0]); out.sueno = num(nums[1]); out.pantalla = num(nums[2]);
+        return out;
+      }
+      return null;
+    }
+    async function pasteHealth() {
+      if (today.closed) { showToast('El dia ya esta cerrado.'); return; }
+      let text = '';
+      try {
+        if (navigator.clipboard && navigator.clipboard.readText) {
+          text = await navigator.clipboard.readText();
+        }
+      } catch (e) { }
+      let h = parseHealthText(text);
+      if (!h) {
+        // fallback: pedirlo a mano
+        const manual = prompt('Pega aqu\u00ED los datos del atajo\n(o escribe: pasos sueno pantalla, ej. "9000 7.5 1.2"):', '');
+        h = parseHealthText(manual);
+      }
+      if (!h || (h.pasos === null && h.sueno === null && h.pantalla === null)) {
+        showToast('\u26A0\uFE0F No se reconocieron datos de salud');
+        return;
+      }
+      applyHealth(h, false);
+      render();
+      showToast('\u2764\uFE0F Datos de salud pegados!');
+    }
 
     // ===== EVALUACION AUTOMATICA =====
     function autoState(idx, day) {
