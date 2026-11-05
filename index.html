@@ -3912,167 +3912,257 @@
       const cvs = document.getElementById('heroCanvas');
       if (!cvs || !profile) return;
       const ctx = cvs.getContext('2d');
-      ctx.clearRect(0, 0, 220, 260);
       const xp = profile.xp;
-      const lv = getLvIdx(xp), lvConf = LEVELS[lv];
+      const lv = Math.max(0, Math.min(6, getLvIdx(xp)));
+      const lvConf = LEVELS[lv];
       const mood = heroMood || baseHeroMood();
       const f = heroFrame;
       const S = 10;
-      const bob = Math.round(Math.sin(f * 0.12) * 1.6);            // respiracion
-      const breathe = (Math.sin(f * 0.12) > 0.3) ? 1 : 0;          // hombros
-      const blink = (f % 78) < 5;                                  // parpadeo
-      const armSw = Math.round(Math.sin(f * 0.12 + 1.3));          // brazos idle
+      const bob = Math.round(Math.sin(f * 0.12) * 1.2);
+      const breathe = Math.sin(f * 0.12) > 0.3 ? 1 : 0;
+      const blink = (f % 78) < 5;
+      const armSw = Math.round(Math.sin(f * 0.12 + 1.3));
+      const skin = ['#98705d','#b8846a','#c4956e','#d3a078','#dfb58e','#e9c6a3','#f4d9b8'][lv];
+      const skinShade = ['#68483d','#9a6c54','#a67a58','#ae795b','#b98b6d','#c99c7d','#d9b99a'][lv];
+      const hair = ['#24150f','#302018','#3a2818','#24170f','#171018','#100d18','#f2d28a'][lv];
+      const dark = '#17131d', black = '#090a10', white = '#f4f0e8';
+      const gold = '#f3bd45', silver = '#b9c7d8';
+      const shirt = ['#51413b','#65564b','#397a4d','#285aa0','#633c91','#20283f','#f0e7c9'][lv];
+      const pants = ['#30252a','#343044','#263b45','#202b48','#29243d','#171b2d','#332b43'][lv];
+      const boot = ['#282027','#30252a','#3b2b22','#252c3c','#282039','#171522','#e6c16b'][lv];
+      const HX = 7;
+      const HY = (lv === 0 ? 3 : 2) + bob;
 
-      function px(x, y, c, w = 1, h = 1) { ctx.fillStyle = c; ctx.fillRect(x * S, y * S, w * S, h * S); }
-      function row(y, x1, x2, c) { px(x1, y, c, x2 - x1 + 1, 1); }
+      function px(x, y, color, w = 1, h = 1) {
+        ctx.fillStyle = color;
+        ctx.fillRect(x * S, y * S, w * S, h * S);
+      }
+      function row(y, x1, x2, color) { px(x1, y, color, x2 - x1 + 1, 1); }
+      function ellipse(x, y, rx, ry, color, alpha = 1) {
+        ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = color;
+        ctx.beginPath(); ctx.ellipse(x * S, y * S, rx * S, ry * S, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+      }
 
-      // aura por nivel
+      ctx.clearRect(0, 0, cvs.width || 220, cvs.height || 260);
+
+      // Aura: aparece gradualmente al dejar atrás los primeros niveles.
       if (lvConf.aura) {
-        ctx.fillStyle = lvConf.aura;
-        ctx.beginPath(); ctx.ellipse(11 * S, 13 * S, 8.5 * S, 11 * S, 0, 0, Math.PI * 2); ctx.fill();
+        const auraColor = lv === 6 ? '#ffd76a' : lv >= 4 ? '#a855f7' : '#579dff';
+        ellipse(11, 13, 8.2 + Math.sin(f * .06) * .25, 10.5, auraColor, .13 + Math.sin(f * .08) * .025);
       }
-      const skins = ['#b8846a', '#c4956e', '#cda070', '#d8b080', '#e0c090', '#eecca0', '#f5d8b8'];
-      const skinsD = ['#9a6c54', '#a67a58', '#b08458', '#bb9468', '#c4a578', '#d4b088', '#ddbf9f'];
-      const hairs = ['#251208', '#302010', '#3a2810', '#1a1208', '#0e0808', '#080808', '#1a1008'];
-      const armors = ['#302828', '#3a4060', '#3060a0', '#4060c0', '#5040a0', '#141420', '#060608'];
-      const armorsL = ['#403838', '#4a5074', '#3f74b8', '#5074d4', '#6454b8', '#222236', '#16161e'];
-      const pants = ['#201820', '#2a304a', '#204060', '#183858', '#0a1830', '#141420', '#060608'];
-      const boots = ['#201008', '#222230', '#1a3050', '#1a3060', '#200830', '#180020', '#0a0810'];
-      const sk = skins[lv], skD = skinsD[lv], hr = hairs[lv], ar = armors[lv], arL = armorsL[lv], pa = pants[lv], bt = boots[lv];
-      const gold = '#e8c030', wht = '#f0f0ff', eyeD = '#101426', eyeW = '#e8f0ff';
 
-      const HX = 7, HY = 2 + bob; // cabeza: x 7..14, y 2..7
+      // Capa y silueta: el personaje gana altura y anchura con cada nivel.
+      if (lv >= 4) {
+        const cape = lv === 6 ? '#8d263c' : lv === 5 ? '#51245f' : '#38244f';
+        row(11 + bob, 6, 15, cape);
+        row(12 + bob, 5, 6, cape); row(12 + bob, 15, 16, cape);
+        row(13 + bob, 5, 6, cape); row(13 + bob, 15, 16, cape);
+        row(14 + bob, 6, 7, cape); row(14 + bob, 14, 15, cape);
+        row(15 + bob, 7, 8, cape); row(15 + bob, 13, 14, cape);
+        row(16 + bob, 8, 8, cape); row(16 + bob, 13, 13, cape);
+      }
 
-      // corona (nivel maximo)
+      // Corona y pelo.
       if (lv === 6) {
-        row(HY - 2, HX + 1, HX + 6, '#f0b020');
-        px(HX + 1, HY - 3, '#f0b020'); px(HX + 3, HY - 3, '#f0b020'); px(HX + 5, HY - 3, '#f0b020');
-        px(HX + 2, HY - 2, '#ffe080'); px(HX + 4, HY - 2, '#ffe080');
+        row(HY - 2, HX + 1, HX + 6, gold);
+        px(HX + 1, HY - 3, gold); px(HX + 3, HY - 4, gold); px(HX + 5, HY - 3, gold);
+        px(HX + 2, HY - 2, '#fff0a6'); px(HX + 4, HY - 2, '#fff0a6');
       }
-      // pelo
-      row(HY - 1, HX, HX + 7, hr);
-      row(HY, HX, HX + 7, hr);
-      px(HX, HY + 1, hr); px(HX + 7, HY + 1, hr);
-      if (lv === 0) { px(HX - 1, HY, hr); px(HX + 8, HY + 1, hr); px(HX + 2, HY - 2, hr); px(HX + 5, HY - 2, hr); }
-      if (lv >= 4) { px(HX + 1, HY + 1, hr); px(HX + 6, HY + 1, hr); }
-
-      // cara
-      row(HY + 1, HX + 1, HX + 6, sk);
-      row(HY + 2, HX, HX + 7, sk);
-      row(HY + 3, HX, HX + 7, sk);
-      row(HY + 4, HX, HX + 7, sk);
-      row(HY + 5, HX + 1, HX + 6, sk);
-      px(HX, HY + 4, skD); px(HX + 7, HY + 4, skD);
-      px(HX - 1, HY + 3, sk); px(HX + 8, HY + 3, sk); // orejas
-
-      // ojos
-      const eyL = HX + 2, eyR = HX + 5, eyY = HY + 2;
-      if (blink && mood !== 'victory') {
-        px(eyL, eyY + 1, skD); px(eyR, eyY + 1, skD);
-      } else if (mood === 'study') {
-        px(eyL, eyY, eyeW); px(eyR, eyY, eyeW);
-        px(eyL, eyY + 1, eyeD); px(eyR, eyY + 1, eyeD);
-      } else if (mood === 'victory') {
-        px(eyL, eyY, eyeD); px(eyL - 1, eyY + 1, eyeD); px(eyL + 1, eyY + 1, eyeD);
-        px(eyR, eyY, eyeD); px(eyR - 1, eyY + 1, eyeD); px(eyR + 1, eyY + 1, eyeD);
+      row(HY - 1, HX, HX + 7, hair);
+      row(HY, HX - (lv === 0 ? 1 : 0), HX + 7 + (lv === 0 ? 1 : 0), hair);
+      px(HX, HY + 1, hair); px(HX + 7, HY + 1, hair);
+      if (lv === 0) {
+        // Pelo apelmazado, mechones caídos y aspecto descuidado.
+        px(HX - 1, HY + 1, hair); px(HX + 8, HY + 2, hair);
+        px(HX + 1, HY - 2, hair); px(HX + 3, HY - 2, hair);
+        px(HX + 6, HY - 2, hair); px(HX + 2, HY + 1, '#493025');
+      } else if (lv >= 4) {
+        row(HY, HX + 1, HX + 6, hair);
+        px(HX + 1, HY + 1, hair); px(HX + 6, HY + 1, hair);
       } else {
-        px(eyL, eyY, eyeW); px(eyR, eyY, eyeW);
-        px(eyL, eyY + 1, eyeD); px(eyR, eyY + 1, eyeD);
+        px(HX + 2, HY - 2, hair); px(HX + 5, HY - 2, hair);
       }
-      // cejas
-      if (mood === 'sad' || mood === 'tired') { px(eyL, eyY - 1, hr); px(eyR, eyY - 1, hr); }
-      // ojeras (poco sueño)
-      const tiredEyes = (mood === 'tired') || (today && today.health.sueno !== null && today.health.sueno < 6.5);
-      if (tiredEyes) { px(eyL, eyY + 2, '#7a5878'); px(eyR, eyY + 2, '#7a5878'); }
-      // rubor
-      if (mood === 'victory' || mood === 'happy') { px(HX, HY + 3, '#e08a8a'); px(HX + 7, HY + 3, '#e08a8a'); }
-      // boca
-      const mY = HY + 4;
-      if (mood === 'victory') { px(HX + 3, mY, eyeD, 2, 1); px(HX + 3, mY + 1, '#d06060', 2, 1); }
-      else if (mood === 'happy') { px(HX + 2, mY, skD); px(HX + 3, mY, '#803838', 2, 1); px(HX + 5, mY, skD); px(HX + 2, mY - 1, '#803838'); px(HX + 5, mY - 1, '#803838'); }
-      else if (mood === 'sad') { px(HX + 3, mY, '#703030', 2, 1); px(HX + 2, mY + 1, '#703030'); px(HX + 5, mY + 1, '#703030'); }
-      else if (mood === 'tired') { px(HX + 3, mY, '#805050', 2, 1); }
-      else { px(HX + 3, mY, '#804848', 2, 1); }
-      // gota de sudor si cansado
-      if (tiredEyes) {
-        const dy = (f % 40) / 40 * 2;
-        ctx.fillStyle = 'rgba(120,200,255,.85)';
-        ctx.fillRect((HX + 8.4) * S, (HY + 1 + dy) * S, S * .5, S * .7);
-      }
-      // cuello
-      row(HY + 6, HX + 3, HX + 4, sk);
 
-      // torso
+      // Cara: en nivel 1 está demacrada; mejora la expresión al subir.
+      row(HY + 1, HX + 1, HX + 6, skin);
+      row(HY + 2, HX, HX + 7, skin);
+      row(HY + 3, HX, HX + 7, skin);
+      row(HY + 4, HX, HX + 7, skin);
+      row(HY + 5, HX + 1, HX + 6, skin);
+      px(HX - 1, HY + 3, skin); px(HX + 8, HY + 3, skin);
+      px(HX, HY + 4, skinShade); px(HX + 7, HY + 4, skinShade);
+
+      const eyeY = HY + 2;
+      const eyeL = HX + 2, eyeR = HX + 5;
+      if (blink && mood !== 'victory') {
+        px(eyeL, eyeY + 1, skinShade); px(eyeR, eyeY + 1, skinShade);
+      } else {
+        const eyeColor = lv === 6 ? '#ffe46b' : lv >= 5 ? '#77eaff' : '#f7f4ed';
+        px(eyeL, eyeY, eyeColor); px(eyeR, eyeY, eyeColor);
+        px(eyeL, eyeY + 1, black); px(eyeR, eyeY + 1, black);
+      }
+      if (lv === 0) {
+        // Ojeras marcadas, nariz rojiza y barba de varios días.
+        px(eyeL - 1, eyeY + 2, '#55404a', 2, 1);
+        px(eyeR, eyeY + 2, '#55404a', 2, 1);
+        px(HX + 3, HY + 4, '#9c6259', 2, 1);
+        px(HX + 2, HY + 5, '#49302d'); px(HX + 5, HY + 5, '#49302d');
+      } else if (mood === 'tired' || (today && today.health.sueno !== null && today.health.sueno < 6.5)) {
+        px(eyeL, eyeY + 2, '#795b78'); px(eyeR, eyeY + 2, '#795b78');
+      }
+      if (mood === 'sad') {
+        px(eyeL, eyeY - 1, hair); px(eyeR, eyeY - 1, hair);
+        px(HX + 3, HY + 5, '#703030', 2, 1);
+      } else if (mood === 'happy' || mood === 'victory') {
+        px(HX + 2, HY + 5, '#803838'); px(HX + 3, HY + 5, '#803838', 2, 1);
+        px(HX + 5, HY + 5, '#803838');
+      } else {
+        px(HX + 3, HY + 5, '#804848', 2, 1);
+      }
+
+      // Cuello.
+      row(HY + 6, HX + 3, HX + 4, skin);
+
+      // Torso: nivel 1 encorvado, estrecho y con barriga; luego gana físico y equipo.
       const TY = 9 + bob;
-      const armorTop = lv === 5 || lv === 6;
-      row(TY, HX - breathe, HX + 7 + breathe, ar);
-      row(TY + 1, HX - 1, HX + 8, ar);
-      row(TY + 2, HX - 1, HX + 8, ar);
-      row(TY + 3, HX, HX + 7, ar);
-      row(TY + 4, HX, HX + 7, ar);
-      px(HX, TY + 1, arL); px(HX, TY + 2, arL); px(HX, TY + 3, arL);
-      if (armorTop) {
-        row(TY, HX + 2, HX + 5, wht); row(TY + 1, HX + 3, HX + 4, wht);
-        px(HX + 3, TY + 2, gold, 2, 1); px(HX + 3, TY + 3, gold);
-      } else if (lv >= 3) {
-        px(HX + 3, TY + 1, gold, 2, 1); px(HX + 3, TY + 2, '#ffe080');
-      } else if (lv === 2) {
-        px(HX + 2, TY + 2, wht, 2, 1);
+      if (lv === 0) {
+        row(TY, HX + 1, HX + 6, '#493a35');
+        row(TY + 1, HX, HX + 7, '#51403a');
+        row(TY + 2, HX - 1, HX + 8, '#59453d');
+        row(TY + 3, HX, HX + 7, '#51403a');
+        row(TY + 4, HX + 1, HX + 6, '#463832');
+        px(HX + 2, TY + 2, '#30262a'); px(HX + 5, TY + 3, '#30262a');
+        // Remiendos y agujeros de la camiseta vieja.
+        px(HX + 1, TY + 1, '#92735c'); px(HX + 6, TY + 3, '#92735c');
+        px(HX + 3, TY + 4, '#241d24');
+      } else {
+        const torsoWide = lv >= 3 ? 9 : 7;
+        const left = lv >= 3 ? HX - 1 : HX;
+        const right = left + torsoWide;
+        row(TY, left + 1, right - 1, shirt);
+        row(TY + 1, left, right, shirt);
+        row(TY + 2, left, right, shirt);
+        row(TY + 3, left + 1, right - 1, shirt);
+        row(TY + 4, left + 1, right - 1, shirt);
+        if (lv >= 3) {
+          px(left, TY + 1, silver); px(left, TY + 2, silver);
+          px(right, TY + 1, silver); px(right, TY + 2, silver);
+        }
+        if (lv === 2) { px(HX + 3, TY + 1, '#b8d8a0', 2, 1); }
+        if (lv >= 3) {
+          px(HX + 3, TY + 1, gold, 2, 1);
+          px(HX + 3, TY + 2, lv === 6 ? '#fff0a6' : gold);
+        }
+        if (lv >= 4) {
+          row(TY, HX + 1, HX + 6, silver);
+          px(HX + 2, TY + 1, '#e4e9f0'); px(HX + 5, TY + 1, '#e4e9f0');
+          px(HX + 3, TY + 3, gold, 2, 1);
+        }
+        if (lv === 6) {
+          row(TY + 2, HX + 1, HX + 6, '#fff0c2');
+          px(HX + 3, TY + 2, '#fff8d8', 2, 1);
+        }
       }
-      if (lv === 0) { px(HX + 2, TY + 2, '#0a0a10'); px(HX + 5, TY + 1, '#0a0a10'); }
 
-      // brazos
-      const studyPose = mood === 'study';
-      const victoryPose = mood === 'victory';
-      if (victoryPose) {
-        px(HX - 2, TY - 1 - armSw, sk); px(HX - 2, TY - armSw, sk); px(HX - 1, TY, ar);
-        px(HX + 9, TY - 1 + armSw, sk); px(HX + 9, TY + armSw, sk); px(HX + 8, TY, ar);
-        px(HX - 2, TY - 2 - armSw, sk); px(HX + 9, TY - 2 + armSw, sk);
-      } else if (studyPose) {
-        px(HX - 2, TY + 1, ar); px(HX - 2, TY + 2, sk);
-        px(HX + 9, TY + 1, ar); px(HX + 9, TY + 2, sk);
-        // libro
+      // Brazos: cada rango aumenta ligeramente el volumen y añade brazales.
+      const armLeft = lv >= 3 ? HX - 2 : HX - 2;
+      const armRight = HX + 9;
+      const armY = TY + 1 + (armSw > 0 ? 1 : 0);
+      const armColor = lv >= 4 ? silver : (lv >= 2 ? shirt : (lv === 0 ? '#98705d' : shirt));
+      if (mood === 'victory') {
+        px(armLeft, TY - 1 - armSw, skin); px(armLeft, TY - armSw, skin);
+        px(armLeft + 1, TY, armColor);
+        px(armRight, TY - 1 + armSw, skin); px(armRight, TY + armSw, skin);
+        px(armRight - 1, TY, armColor);
+      } else if (mood === 'study') {
+        px(armLeft, TY + 1, armColor); px(armLeft, TY + 2, skin);
+        px(armRight, TY + 1, armColor); px(armRight, TY + 2, skin);
+        // Libro sostenido delante del torso.
         px(HX + 1, TY + 3, '#3050b0', 6, 1);
         px(HX + 1, TY + 4, '#4060c0', 6, 2);
-        ctx.fillStyle = '#2a3a90'; ctx.fillRect((HX + 3.9) * S, (TY + 4) * S, S * .25, 2 * S);
-        ctx.fillStyle = '#e8f0ff';
-        for (let i = 0; i < 2; i++) {
-          ctx.fillRect((HX + 1.5) * S, (TY + 4.3 + i * .7) * S, 2 * S, S * .18);
-          ctx.fillRect((HX + 4.6) * S, (TY + 4.3 + i * .7) * S, 2 * S, S * .18);
-        }
-        px(HX, TY + 4, sk); px(HX + 7, TY + 4, sk);
+        px(HX + 3, TY + 4, '#243878');
+        px(HX + 2, TY + 4, white, 2, 1); px(HX + 5, TY + 4, white, 1, 1);
       } else {
-        const aL = TY + 1 + (armSw > 0 ? 1 : 0), aR = TY + 1 + (armSw > 0 ? 0 : 1);
-        px(HX - 2, aL, ar); px(HX - 2, aL + 1, ar); px(HX - 2, aL + 2, sk); px(HX - 2, aL + 3, sk);
-        px(HX + 9, aR, ar); px(HX + 9, aR + 1, ar); px(HX + 9, aR + 2, sk); px(HX + 9, aR + 3, sk);
-        if (mood === 'sad') { px(HX - 2, aL + 4, sk); px(HX + 9, aR + 4, sk); }
+        px(armLeft, armY, armColor); px(armLeft, armY + 1, armColor);
+        px(armLeft, armY + 2, skin); px(armLeft, armY + 3, skin);
+        px(armRight, armY, armColor); px(armRight, armY + 1, armColor);
+        px(armRight, armY + 2, skin); px(armRight, armY + 3, skin);
+        if (lv >= 4) {
+          px(armLeft, armY + 1, gold); px(armRight, armY + 1, gold);
+        }
       }
 
-      // piernas
+      // Cinturón y piernas.
       const LY = 15;
-      row(LY, HX, HX + 7, pa);
-      row(LY + 1, HX, HX + 7, pa);
-      px(HX + 1, LY + 2, pa, 2, 1); px(HX + 5, LY + 2, pa, 2, 1);
-      px(HX + 1, LY + 3, pa, 2, 1); px(HX + 5, LY + 3, pa, 2, 1);
-      px(HX + 1, LY + 4, pa, 2, 1); px(HX + 5, LY + 4, pa, 2, 1);
-      // botas
-      row(LY + 5, HX, HX + 2, bt); row(LY + 5, HX + 5, HX + 7, bt);
-      if (lv >= 3) { px(HX, LY + 5, '#4080c0'); px(HX + 7, LY + 5, '#4080c0'); }
-      if (lv === 6) { px(HX, LY + 5, gold); px(HX + 7, LY + 5, gold); }
+      if (lv === 0) {
+        row(LY, HX + 1, HX + 6, '#493a35');
+        row(LY + 1, HX + 1, HX + 6, '#30252a');
+        // Piernas finas y cortas, con pantalón raído.
+        px(HX + 2, LY + 2, pants, 1, 2); px(HX + 5, LY + 2, pants, 1, 2);
+        px(HX + 1, LY + 3, '#51403a'); px(HX + 6, LY + 3, '#51403a');
+        px(HX + 1, LY + 4, boot, 2, 1); px(HX + 5, LY + 4, boot, 2, 1);
+      } else {
+        row(LY, HX, HX + 7, lv >= 4 ? silver : gold);
+        px(HX + 3, LY, gold);
+        px(HX + 1, LY + 1, pants, 2, 1); px(HX + 5, LY + 1, pants, 2, 1);
+        px(HX + 1, LY + 2, pants, 2, 2); px(HX + 5, LY + 2, pants, 2, 2);
+        px(HX + 1, LY + 4, pants, 2, 1); px(HX + 5, LY + 4, pants, 2, 1);
+        row(LY + 5, HX, HX + 2, boot); row(LY + 5, HX + 5, HX + 7, boot);
+        if (lv >= 3) {
+          px(HX, LY + 4, silver); px(HX + 7, LY + 4, silver);
+        }
+        if (lv === 6) {
+          px(HX, LY + 5, gold); px(HX + 7, LY + 5, gold);
+        }
+      }
 
-      // chispas si energico / nivel max
-      if (mood === 'happy' || mood === 'victory' || lv === 6) {
-        ctx.fillStyle = 'rgba(255,210,60,.85)';
+      // Detalles exclusivos de cada etapa.
+      if (lv === 0) {
+        // Moscas orbitando y pequeñas marcas verdes de mal olor; sin desnudez.
+        ctx.save(); ctx.globalAlpha = .8; ctx.fillStyle = '#b3c45b';
+        for (let i = 0; i < 3; i++) {
+          const a = f * .075 + i * 2.1;
+          ctx.fillRect((11 + Math.cos(a) * 7.5) * S, (13 + Math.sin(a) * 4.5) * S, 3, 3);
+        }
+        ctx.restore();
+        ctx.fillStyle = 'rgba(137,177,75,.12)';
+        ctx.beginPath(); ctx.ellipse(110, 164, 78, 42, 0, 0, Math.PI * 2); ctx.fill();
+      }
+      if (lv === 1) {
+        // Camiseta vieja y una pequeña venda en el brazo.
+        px(HX - 2, TY + 1, '#b7a18a');
+      }
+      if (lv === 5 || lv === 6) {
+        // Hombreras y arma pixelada en la espalda.
+        px(HX - 3, TY - 1, lv === 6 ? gold : '#626b85', 2, 2);
+        px(HX + 8, TY - 1, lv === 6 ? gold : '#626b85', 2, 2);
+        px(HX + 10, TY + 2, silver, 1, 5);
+        px(HX + 9, TY + 1, lv === 6 ? gold : '#b7d5ef', 3, 1);
+      }
+      if (lv === 6) {
+        // Alas estilizadas.
+        px(3, 10 + bob, '#f6e9c5', 2, 1); px(2, 11 + bob, '#f6e9c5', 2, 1);
+        px(3, 12 + bob, '#d7e8ff', 2, 1); px(16, 10 + bob, '#f6e9c5', 2, 1);
+        px(17, 11 + bob, '#f6e9c5', 2, 1); px(16, 12 + bob, '#d7e8ff', 2, 1);
+        ctx.fillStyle = 'rgba(255,220,100,.85)';
+        for (let i = 0; i < 8; i++) {
+          const a = f * .05 + i * Math.PI / 4;
+          ctx.fillRect(110 + Math.cos(a) * 95, 130 + Math.sin(a) * 100, 3, 3);
+        }
+      }
+
+      // Expresiones y partículas de cansancio.
+      if (mood === 'tired' && !blink) {
+        ctx.fillStyle = 'rgba(180,200,255,.75)';
+        ctx.font = '12px Orbitron, monospace';
+        ctx.fillText('z', (HX + 9) * S, (HY - 1) * S - (f % 30) / 4);
+      }
+      if ((mood === 'happy' || mood === 'victory') && lv >= 2) {
+        ctx.fillStyle = 'rgba(255,220,90,.85)';
         for (let i = 0; i < 3; i++) {
           const a = f * .06 + i * 2.1;
-          ctx.fillRect(11 * S + Math.cos(a) * 8.6 * S, 12 * S + Math.sin(a) * 9.5 * S, 3, 3);
+          ctx.fillRect(110 + Math.cos(a) * 86, 125 + Math.sin(a) * 92, 3, 3);
         }
-      }
-      // zzz si muy cansado
-      if (mood === 'tired' && !blink) {
-        ctx.fillStyle = 'rgba(180,200,255,.7)';
-        ctx.font = (9 + (f % 30) / 6) + 'px Orbitron, monospace';
-        ctx.fillText('z', (HX + 9) * S, (HY - 1) * S + (f % 30) / -4);
       }
     }
     setInterval(() => { heroFrame++; drawHero(); }, 90);
