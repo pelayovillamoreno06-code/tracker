@@ -3688,7 +3688,7 @@
       const cfg = [
         { key: 'pasos', v: 'vPasos', b: 'bPasos', c: 'cPasos', m: 'mPasos', goal: 8000, fmt: x => Math.round(x).toLocaleString('es-ES'), ok: x => x >= 8000, pct: x => Math.min(100, x / 8000 * 100) },
         { key: 'sueno', v: 'vSueno', b: 'bSueno', c: 'cSueno', m: 'mSueno', goal: 7.5, fmt: x => { const hh = Math.floor(x), mm = Math.round((x - hh) * 60); return hh + 'h ' + String(mm).padStart(2, '0') + 'm'; }, ok: x => x >= 7.5, pct: x => Math.min(100, x / 7.5 * 100) },
-        { key: 'pantalla', v: 'vPantalla', b: 'bPantalla', c: 'cPantalla', m: 'mPantalla', goal: 1.0, fmt: x => { const hh = Math.floor(x), mm = Math.round((x - hh) * 60); return hh + 'h ' + String(mm).padStart(2, '0') + 'm'; }, ok: x => x <= 1.0, pct: x => Math.min(100, x / 1.0 * 100) }
+        { key: 'pantalla', v: 'vPantalla', b: 'bPantalla', c: 'cPantalla', m: 'mPantalla', goal: 2.0, fmt: x => { const hh = Math.floor(x), mm = Math.round((x - hh) * 60); return hh + 'h ' + String(mm).padStart(2, '0') + 'm'; }, ok: x => x <= 1.0, pct: x => Math.min(100, x / 1.0 * 100) }
       ];
       let anyData = false;
       cfg.forEach(c => {
