@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport"
-    content="width=device-width,initial-scale=1.0,viewport-fit=cover,user-scalable=no,maximum-scale=1">
+    content="width=device-width,initial-scale=1.0,viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Habitos RPG">
@@ -2017,6 +2017,56 @@
       font:900 9px 'Orbitron',monospace; letter-spacing:.2px; padding:6px; line-height:1.3; cursor:pointer; touch-action:manipulation; }
     .boost-use:disabled { opacity:.35; cursor:default; }
     @media (max-width:380px) { .boost-use { flex-basis:70px; font-size:8px; } .daily-chest-card { padding:22px 14px 18px; } }
+    @media (max-width:600px) {
+      #dailyChestModal {
+        align-items: flex-start;
+        justify-content: center;
+        padding: max(12px, env(safe-area-inset-top)) 10px max(12px, env(safe-area-inset-bottom));
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+      }
+      .daily-chest-card {
+        width: 100%;
+        max-width: 430px;
+        max-height: calc(100vh - 24px);
+        max-height: calc(100dvh - max(24px, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        padding: 18px 12px 16px;
+        border-radius: 20px;
+      }
+      .daily-chest-kicker { font-size: 9px; letter-spacing: 2px; }
+      .daily-chest-title { font-size: clamp(17px, 5vw, 20px); }
+      .daily-chest-sub { font-size: 14px; max-width: 290px; }
+      .chest-stage { height: 145px; margin: 4px auto 0; }
+      .chest-stage:before { width: 145px; height: 145px; }
+      .chest-visual { transform: scale(.86); }
+      .roulette-stage { height: 125px; margin-top: 0; }
+      .roulette-caption { font-size: 8px; letter-spacing: 1.3px; margin-bottom: 23px; }
+      .roulette-wrap { width: 100%; }
+      .roulette-track { gap: 3px; padding: 6px; border-radius: 12px; }
+      .roulette-slot { height: 64px; gap: 4px; }
+      .roulette-slot-icon { font-size: clamp(17px, 5vw, 21px); }
+      .roulette-slot-label { font-size: clamp(6px, 1.8vw, 8px); letter-spacing: 0; }
+      .roulette-pointer { top: -23px; }
+      #chestResult { min-height: 62px; margin: 5px auto 8px; }
+      #chestResultIcon { font-size: 36px; }
+      #chestResultTitle { font-size: 14px; }
+      #chestResultText { font-size: 14px; line-height: 1.3; }
+      #chestOpenBtn { min-height: 48px; width: 100%; font-size: 11px; touch-action: manipulation; }
+    }
+    @media (max-height:700px) and (max-width:600px) {
+      #dailyChestModal { align-items: flex-start; }
+      .daily-chest-card { padding-top: 12px; padding-bottom: 12px; }
+      .chest-stage { height: 112px; }
+      .chest-stage:before { width: 112px; height: 112px; }
+      .chest-visual { transform: scale(.72); }
+      .roulette-stage { height: 112px; }
+      #chestResult { min-height: 48px; }
+    }
 
   </style>
 </head>
@@ -2519,6 +2569,25 @@
       const on = _audioCtx && _audioCtx.state === 'running';
       b.style.display = on ? 'none' : 'block';
     }
+
+    // Desbloqueo global exclusivo para iPhone/iPad: cualquier toque
+    // en la pantalla intenta activar o reanudar el audio.
+    (function installGlobalAudioUnlock() {
+      const isAppleMobile = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      if (!isAppleMobile) return;
+      let lastUnlockAt = 0;
+      const unlockFromGesture = () => {
+        const now = Date.now();
+        // Evita ejecutar varias veces por el mismo toque.
+        if (now - lastUnlockAt < 350) return;
+        lastUnlockAt = now;
+        ensureAudio();
+      };
+      document.addEventListener('touchend', unlockFromGesture, { capture: true, passive: true });
+      document.addEventListener('pointerup', unlockFromGesture, { capture: true, passive: true });
+      document.addEventListener('click', unlockFromGesture, { capture: true, passive: true });
+    })();
 
     // ---- síntesis ----
     // nota con envolvente ADSR-ish y opcion de glide y vibrato
