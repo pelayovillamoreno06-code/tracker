@@ -1945,6 +1945,79 @@
       color: #e8e0ff;
     }
 
+
+    /* ===== COFRE DIARIO ===== */
+    #dailyChestModal {
+      position: fixed; inset: 0; z-index: 1200; display: flex; align-items: center; justify-content: center;
+      padding: 22px 16px; background: radial-gradient(ellipse at 50% 35%, rgba(70,35,130,.72), rgba(4,3,15,.98) 68%);
+      opacity: 0; pointer-events: none; transition: opacity .35s ease; overflow-y: auto;
+    }
+    #dailyChestModal.show { opacity: 1; pointer-events: all; }
+    .daily-chest-card { width: min(430px, 94vw); padding: 26px 20px 22px; text-align: center; border-radius: 24px;
+      background: linear-gradient(155deg, rgba(35,20,72,.98), rgba(10,8,28,.98)); border: 1px solid rgba(192,132,252,.55);
+      box-shadow: 0 0 55px rgba(139,92,246,.3), inset 0 1px rgba(255,255,255,.1); }
+    .daily-chest-kicker { font: 900 11px 'Orbitron',monospace; color: #c4b5fd; letter-spacing: 3px; }
+    .daily-chest-title { margin-top: 9px; font: 900 20px 'Orbitron',monospace; color: #fff; text-shadow: 0 0 18px rgba(196,181,253,.55); }
+    .daily-chest-sub { margin: 9px auto 2px; max-width: 310px; color: rgba(226,216,255,.72); font: 600 15px 'Rajdhani',sans-serif; line-height: 1.35; }
+    .chest-stage { height: 190px; display: flex; align-items: center; justify-content: center; position: relative; margin: 10px auto 4px; }
+    .chest-visual { width: 150px; height: 125px; position: relative; filter: drop-shadow(0 16px 20px rgba(0,0,0,.5)); transform-origin: 50% 85%; }
+    .chest-box { position: absolute; left: 8px; right: 8px; bottom: 4px; height: 78px; border: 4px solid #713b1f; border-radius: 12px 12px 17px 17px;
+      background: linear-gradient(90deg,#7c3f1d 0 18%,#b96c2e 18% 82%,#713b1f 82%); box-shadow: inset 0 8px rgba(255,211,130,.18); }
+    .chest-box:before { content:''; position:absolute; left:48%; top:0; bottom:0; width:12px; background:linear-gradient(#f8d36c,#9a621d); border-left:2px solid #744513; border-right:2px solid #744513; }
+    .chest-lid { position:absolute; left:5px; right:5px; top:16px; height:42px; border:4px solid #713b1f; border-radius:18px 18px 7px 7px;
+      background:linear-gradient(90deg,#8a4a21 0 18%,#d28a3d 18% 82%,#82421e 82%); transform-origin: 50% 100%; transition: transform .55s cubic-bezier(.2,.8,.2,1); z-index:2; }
+    .chest-lid:after { content:''; position:absolute; left:48%; top:-2px; bottom:-2px; width:12px; background:linear-gradient(#ffe38a,#a66b22); border-left:2px solid #744513; border-right:2px solid #744513; }
+    .chest-lock { position:absolute; z-index:3; left:calc(50% - 11px); top:58px; width:22px; height:27px; border-radius:5px; background:linear-gradient(#ffe99a,#c58a28); border:2px solid #70451a; }
+    .chest-glow { position:absolute; inset:15px 0 0; border-radius:50%; background:rgba(250,204,21,0); filter:blur(20px); transition:all .6s ease; }
+    .chest-visual.opening { animation: chestShake .12s linear 7; }
+    .chest-visual.opening .chest-lid, .chest-visual.revealed .chest-lid { transform:rotate(-38deg) translate(-7px,-23px); }
+    .chest-visual.revealed .chest-glow { background:rgba(250,204,21,.62); transform:scale(1.25); }
+    @keyframes chestShake { 0%,100%{transform:translateX(0) rotate(0)} 25%{transform:translateX(-7px) rotate(-3deg)} 75%{transform:translateX(7px) rotate(3deg)} }
+    .chest-sparkles { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:25px; opacity:0; transform:scale(.3); pointer-events:none; }
+    .chest-visual.revealed + .chest-sparkles { opacity:1; transform:scale(1.35); transition:all .5s ease; }
+    #chestResult { min-height:70px; margin:8px auto 12px; opacity:0; transform:translateY(12px) scale(.96); transition:all .45s ease; }
+    #chestResult.show { opacity:1; transform:translateY(0) scale(1); }
+    #chestResult.show #chestResultIcon { animation: chestRewardPop .8s cubic-bezier(.2,1.5,.4,1) both; }
+    @keyframes chestRewardPop { 0%{transform:scale(.2) rotate(-25deg);filter:brightness(2)} 65%{transform:scale(1.25) rotate(8deg)} 100%{transform:scale(1) rotate(0);filter:brightness(1)} }
+    .chest-stage:before { content:''; position:absolute; width:190px; height:190px; border-radius:50%; border:1px dashed rgba(250,204,21,.18); animation: chestOrbit 8s linear infinite; }
+    @keyframes chestOrbit { to { transform:rotate(360deg); } }
+    /* Ruleta horizontal: los premios permanecen fijos y SOLO se desplaza la flecha */
+    .roulette-stage { position:relative; height:142px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; margin:2px auto 4px; }
+    .roulette-caption { color:#fcd34d; font:900 9px 'Orbitron',monospace; letter-spacing:2px; margin:0 0 25px; text-shadow:0 0 12px rgba(251,191,36,.45); }
+    .roulette-wrap { position:relative; width:min(360px, calc(100vw - 66px)); padding-top:0; }
+    .roulette-track { position:relative; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:5px; width:100%; padding:9px; border-radius:15px;
+      border:2px solid #dcae48; background:linear-gradient(180deg,#20153e,#100b25); box-shadow:0 0 0 3px rgba(113,59,31,.65),0 0 22px rgba(250,204,21,.22),inset 0 1px rgba(255,255,255,.12); }
+    .roulette-slot { min-width:0; height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; border-radius:9px;
+      border:1px solid rgba(255,255,255,.16); background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.025)); transition:filter .25s,box-shadow .25s,border-color .25s; }
+    .roulette-slot-icon { font-size:23px; line-height:1; filter:drop-shadow(0 2px 3px #000); }
+    .roulette-slot-label { color:#e9ddff; font:900 8px 'Orbitron',monospace; letter-spacing:.3px; white-space:nowrap; }
+    .roulette-slot.skull { background:linear-gradient(180deg,rgba(127,29,29,.42),rgba(69,10,10,.28)); }
+    .roulette-slot.xp { background:linear-gradient(180deg,rgba(161,98,7,.4),rgba(92,53,4,.25)); }
+    .roulette-slot.boost { background:linear-gradient(180deg,rgba(8,126,139,.42),rgba(8,65,80,.25)); }
+    .roulette-slot.nothing { background:linear-gradient(180deg,rgba(71,55,105,.45),rgba(35,27,59,.3)); }
+    .roulette-slot.selected { border-color:#fff0a6; box-shadow:inset 0 0 0 1px #fcd34d,0 0 17px rgba(250,204,21,.65); filter:brightness(1.45); }
+    .roulette-pointer { position:absolute; z-index:5; top:-25px; left:0; width:28px; height:23px; line-height:22px; text-align:center; color:#fff0a6; font-size:25px;
+      filter:drop-shadow(0 2px 3px #000) drop-shadow(0 0 7px #f59e0b); transform:translateX(0); transition:transform .15s ease-in-out; will-change:transform; pointer-events:none; }
+    .roulette-pointer.spinning { filter:drop-shadow(0 2px 3px #000) drop-shadow(0 0 11px #fbbf24) brightness(1.2); }
+    .roulette-pointer.stopped { filter:drop-shadow(0 2px 3px #000) drop-shadow(0 0 14px #fbbf24) brightness(1.4); }
+    @media(max-width:380px) { .roulette-wrap{width:calc(100vw - 58px)} .roulette-slot{height:66px} .roulette-slot-icon{font-size:20px} .roulette-slot-label{font-size:7px} }
+    @media(prefers-reduced-motion:reduce){.roulette-pointer{transition-duration:.08s}.roulette-slot{transition:none}}
+    #chestResultIcon { font-size:42px; line-height:1.2; }
+    #chestResultTitle { margin-top:5px; font:900 16px 'Orbitron',monospace; color:#fef3c7; }
+    #chestResultText { margin:6px auto 0; max-width:330px; font:600 15px 'Rajdhani',sans-serif; color:rgba(235,228,255,.82); }
+    #chestOpenBtn { width:min(310px,100%); margin-top:8px; background:linear-gradient(135deg,#f59e0b,#d97706); color:#241304; font:900 12px 'Orbitron',monospace; letter-spacing:1px; box-shadow:0 0 26px rgba(245,158,11,.35); }
+    #chestOpenBtn:disabled { opacity:.55; }
+    .boost-wallet { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:13px; border:1px solid rgba(56,189,248,.28); background:linear-gradient(110deg,rgba(8,145,178,.13),rgba(139,92,246,.1)); }
+    .boost-wallet-icon { font-size:22px; }
+    .boost-wallet-copy { flex:1; min-width:0; font:600 12px 'Rajdhani',sans-serif; color:rgba(220,240,255,.75); line-height:1.25; }
+    .boost-wallet-count { white-space:nowrap; font:900 11px 'Orbitron',monospace; color:#67e8f9; }
+    .task-row { display:flex; align-items:stretch; gap:7px; width:100%; }
+    .task-row .hbtn { flex:1; min-width:0; }
+    .boost-use { display:none; flex:0 0 82px; border:1px solid rgba(34,211,238,.45); border-radius:12px; background:rgba(8,145,178,.14); color:#a5f3fc;
+      font:900 9px 'Orbitron',monospace; letter-spacing:.2px; padding:6px; line-height:1.3; cursor:pointer; touch-action:manipulation; }
+    .boost-use:disabled { opacity:.35; cursor:default; }
+    @media (max-width:380px) { .boost-use { flex-basis:70px; font-size:8px; } .daily-chest-card { padding:22px 14px 18px; } }
+
   </style>
 </head>
 
@@ -1960,6 +2033,33 @@
     <div id="radarDeltas" style="display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;max-width:320px;"></div>
     <button class="btn" id="radarContinueBtn" onclick="closeAnimOverlay()" style="margin-top:6px;">CONTINUAR</button>
     <canvas id="animCanvas" width="240" height="240" style="display:none;"></canvas>
+  </div>
+
+  <!-- ===== COFRE DIARIO ===== -->
+  <div id="dailyChestModal" aria-modal="true" role="dialog" aria-label="Cofre diario">
+    <div class="daily-chest-card">
+      <div class="daily-chest-kicker">RECOMPENSA DE INICIO</div>
+      <div class="daily-chest-title">&#127873; COFRE DIARIO</div>
+      <div class="daily-chest-sub" id="chestIntro">Cada día puedes conseguir un impulso. La constancia protege a tu personaje.</div>
+      <div class="chest-stage">
+        <div class="chest-visual" id="chestVisual"><div class="chest-glow"></div><div class="chest-lid"></div><div class="chest-box"></div><div class="chest-lock"></div></div>
+        <div class="chest-sparkles" aria-hidden="true">&#10024; &#11088; &#128165; &#10024;</div>
+      </div>
+      <div class="roulette-stage" aria-label="Ruleta horizontal de premios">
+        <div class="roulette-caption" id="rouletteCaption">RULETA DE LA SUERTE</div>
+        <div class="roulette-wrap">
+          <div class="roulette-pointer" id="roulettePointer" aria-hidden="true">▼</div>
+          <div class="roulette-track" id="rouletteTrack" aria-hidden="true">
+            <div class="roulette-slot skull"><span class="roulette-slot-icon">💀</span><span class="roulette-slot-label">CALAVERA</span></div>
+            <div class="roulette-slot xp"><span class="roulette-slot-icon">✨</span><span class="roulette-slot-label">XP EXTRA</span></div>
+            <div class="roulette-slot boost"><span class="roulette-slot-icon">🪙</span><span class="roulette-slot-label">BOOST</span></div>
+            <div class="roulette-slot nothing"><span class="roulette-slot-icon">💨</span><span class="roulette-slot-label">NADA</span></div>
+          </div>
+        </div>
+      </div>
+      <div id="chestResult"><div id="chestResultIcon"></div><div id="chestResultTitle"></div><div id="chestResultText"></div></div>
+      <button class="btn" id="chestOpenBtn" onclick="openDailyChest()">&#128081; ABRIR COFRE</button>
+    </div>
   </div>
 
   <!-- ===== MODO ESTUDIO ===== -->
@@ -2226,6 +2326,7 @@
 
       <div id="reminderBlock"></div>
 
+      <div id="boostWallet" class="boost-wallet"></div>
       <div id="taskList" style="display:flex;flex-direction:column;gap:10px;"></div>
 
       <div class="divider"></div>
@@ -2632,6 +2733,8 @@
     function defaultProfile() {
       return {
         xp: 0, day: 1, stats: [1, 1, 1, 1], history: [],
+        statIdleDays: [0, 0, 0, 0], // dias consecutivos sin entrenar cada atributo
+        boostCoins: 0, dailyChest: null, chestDeaths: 0,
         streak: 0, bestStreak: 0, questIdx: 0,
         reminder: null,     // { text, doneDate } — persiste entre dias hasta completarse
         lastRadar: null,    // { vals, date, type } — ultimo radar de cierre de dia
@@ -2651,6 +2754,7 @@
       return {
         date: dateStr,
         checked: new Array(N_TASKS).fill(false),
+        boosted: new Array(N_TASKS).fill(false), // tareas validadas excepcionalmente con una moneda Boost
         study: 0,            // segundos acumulados
         trees: [],           // {dur (seg), seed, w (marchito)}
         health: { pasos: null, sueno: null, pantalla: null },
@@ -2693,6 +2797,11 @@
             d.checked = c;
           }
           if (!d.health) d.health = { pasos: null, sueno: null, pantalla: null };
+          if (!Array.isArray(d.boosted) || d.boosted.length !== N_TASKS) {
+            const b = new Array(N_TASKS).fill(false);
+            (d.boosted || []).forEach((v, i) => { if (i < N_TASKS) b[i] = !!v; });
+            d.boosted = b;
+          }
           return d;
         }
       } catch (e) { }
@@ -2832,7 +2941,7 @@
     }
     function evalAutoTasks(celebrate) {
       TASKS.forEach((t, i) => {
-        if (!t.auto) return;
+        if (!t.auto || (today.boosted && today.boosted[i])) return;
         const st = autoState(i, today) === true;
         if (st && !today.checked[i]) {
           today.checked[i] = true;
@@ -3115,7 +3224,7 @@
       drawRadar(ctx, 180, 180, 115, profile.lastRadar.vals, { labels: true, labelSize: 14, labelPad: 26, showVals: true });
       const dt = profile.lastRadar.date || '';
       document.getElementById('radarBigTitle').innerHTML = '\u{1F4CA} STATS \u00B7 ' + dt;
-      document.getElementById('radarBigLegend').textContent = 'Pentagono de tus atributos al cerrar el ultimo dia. Sube completando habitos: gimnasio = fuerza, estudio = mente y foco, no-touch y constancia diaria = disciplina y racha.';
+      document.getElementById('radarBigLegend').textContent = 'Pentagono de tus atributos al cerrar el ultimo dia. Los atributos suben al completar tareas y bajan tras 4 dias sin actividad relacionada (1 punto cada 4 dias): gimnasio = fuerza, estudio = inteligencia, movil/deep work = foco, deep work/no-touch/pasos/sueno = disciplina.';
     }
     function closeRadarBig(e) {
       document.getElementById('radarBigModal').classList.remove('show');
@@ -3127,8 +3236,10 @@
       let earned = 0, penalty = 0;
       day.checked.forEach((c, i) => { if (c) earned += TASKS[i].xp; else penalty += TASKS[i].pen; });
       const bonus = getStreakBonus(profile.streak || 0);
-      const earnedB = Math.round(earned * (1 + bonus / 100));
-      return { earned: earnedB, rawEarned: earned, penalty, net: earnedB - penalty, bonus };
+      const chest = profile.dailyChest;
+      const multiplier = day.checked.filter(Boolean).length > 1 && chest && chest.date === day.date && chest.opened && chest.outcome === 'xp' ? chest.multiplier : 1;
+      const earnedB = Math.round(earned * (1 + bonus / 100) * multiplier);
+      return { earned: earnedB, rawEarned: earned, penalty, net: earnedB - penalty, bonus, multiplier };
     }
 
     // ===== CIERRE DE DIA (manual o automatico) =====
@@ -3136,22 +3247,51 @@
     function finalizeDay(day, auto) {
       if (day.closed) return null;
       // re-evaluar tareas automaticas con los datos finales del dia
-      TASKS.forEach((t, i) => { if (t.auto) day.checked[i] = autoState(i, day) === true; });
+      if (!Array.isArray(day.boosted)) day.boosted = new Array(N_TASKS).fill(false);
+      TASKS.forEach((t, i) => { if (t.auto && !day.boosted[i]) day.checked[i] = autoState(i, day) === true; });
       const q = DAILY_QUESTS[(profile.questIdx || 0) % DAILY_QUESTS.length];
       const questBonus = day.questDone ? q.reward : 0;
       let earned = 0, penalty = 0;
       day.checked.forEach((c, i) => { if (c) earned += TASKS[i].xp; else penalty += TASKS[i].pen; });
+      const habitsDone = day.checked.filter(Boolean).length;
       const bonus = getStreakBonus(profile.streak || 0);
-      const earnedB = Math.round(earned * (1 + bonus / 100));
+      const chest = profile.dailyChest;
+      const xpMultiplier = habitsDone > 1 && chest && chest.date === day.date && chest.opened && chest.outcome === 'xp' ? chest.multiplier : 1;
+      const earnedB = Math.round(earned * (1 + bonus / 100) * xpMultiplier);
       const net = earnedB - penalty;
       const prevLv = getLvIdx(profile.xp);
       // stats — snapshot ANTES
       const prevStats = profile.stats.slice();
       const prevStreakForStat = profile.streak || 0;
-      const STAT_MAP = [[0], [1], [2], [2, 3], [3], [0], [3]];
-      day.checked.forEach((c, i) => { if (c && STAT_MAP[i]) STAT_MAP[i].forEach(s => { profile.stats[s] = Math.min(99, profile.stats[s] + 1); }); });
-      profile.xp = Math.max(0, profile.xp + net + questBonus);
-      const habitsDone = day.checked.filter(Boolean).length;
+      // Orden de stats: 0 Fuerza, 1 Inteligencia, 2 Foco, 3 Disciplina.
+      // Gimnasio mantiene Fuerza; pasos cuentan como Disciplina/actividad, no como fuerza.
+      const STAT_MAP = [[0], [1], [2], [2, 3], [3], [3], [3]];
+      const statWorkedToday = [false, false, false, false];
+      day.checked.forEach((c, i) => {
+        if (!c || !STAT_MAP[i]) return;
+        STAT_MAP[i].forEach(statIdx => {
+          statWorkedToday[statIdx] = true;
+          profile.stats[statIdx] = Math.min(99, profile.stats[statIdx] + 1);
+        });
+      });
+      // Descanso protegido: tras completar una tarea relacionada, el primer dia sin ella
+      // no penaliza. Si tambien pasa el segundo dia sin actividad, baja 1 punto;
+      // despues la decadencia continua cada 4 dias. Una tarea relacionada reinicia el contador.
+      if (!Array.isArray(profile.statIdleDays) || profile.statIdleDays.length !== 4) {
+        profile.statIdleDays = [0, 0, 0, 0];
+      }
+      for (let statIdx = 0; statIdx < 4; statIdx++) {
+        if (statWorkedToday[statIdx]) {
+          profile.statIdleDays[statIdx] = 0;
+        } else {
+          profile.statIdleDays[statIdx] = Math.max(0, Number(profile.statIdleDays[statIdx]) || 0) + 1;
+          const idleDays = profile.statIdleDays[statIdx];
+          if (idleDays >= 2 && (idleDays - 2) % 4 === 0) {
+            profile.stats[statIdx] = Math.max(1, profile.stats[statIdx] - 1);
+          }
+        }
+      }
+      profile.xp = profile.xp + net + questBonus; // puede ser negativo: las penalizaciones no tienen suelo en 0
       profile.history.push({ day: profile.day, xp: profile.xp, habits: habitsDone, date: day.date });
       if (profile.history.length > 30) profile.history.shift();
       profile.day++;
@@ -3178,6 +3318,7 @@
         penalty: penalty,
         questBonus: questBonus,
         streakBonus: bonus,
+        xpMultiplier: xpMultiplier,
         xpTotal: profile.xp,
         level: getLvIdx(profile.xp) + 1,
         streak: newStreak,
@@ -3217,7 +3358,7 @@
       const taskNames = TASKS.map(t => t.name.replace(/\s+/g, ' ').trim());
       const header = ['Dia', 'Fecha', 'Habitos_completados', 'Total_tareas']
         .concat(taskNames)
-        .concat(['XP_neto_dia', 'XP_ganada', 'Penalizacion', 'Bonus_mision', 'Bonus_racha_%',
+        .concat(['XP_neto_dia', 'XP_ganada', 'Penalizacion', 'Bonus_mision', 'Bonus_racha_%', 'Multiplicador_cofre',
           'XP_total', 'Nivel', 'Racha', 'Estudio_min', 'Arboles',
           'Pasos', 'Sueno_h', 'Pantalla_h', 'FUE', 'INT', 'FOC', 'DIS']);
       const lines = [header.map(csvEscape).join(',')];
@@ -3227,7 +3368,7 @@
         while (checks.length < TASKS.length) checks.push('');
         const line = [r.dayNum, r.date, r.habitsDone, r.totalTasks]
           .concat(checks.slice(0, TASKS.length))
-          .concat([r.net, r.earned, r.penalty, r.questBonus, r.streakBonus,
+          .concat([r.net, r.earned, r.penalty, r.questBonus, r.streakBonus, r.xpMultiplier || 1,
             r.xpTotal, r.level, r.streak, r.studyMin, r.trees,
             r.pasos, r.sueno, r.pantalla, r.fue, r.int, r.foc, r.dis]);
         lines.push(line.map(csvEscape).join(','));
@@ -3438,6 +3579,7 @@
           if (document.getElementById('studyModal').classList.contains('show')) closeStudy();
           showToast('\uD83C\uDF05 Nuevo dia iniciado');
           render();
+          setTimeout(showDailyChest, 450);
         } catch (e) {
           // pase lo que pase, el nuevo dia queda operativo
           today = defaultDay(t);
@@ -3514,6 +3656,7 @@
     // ===== TOGGLE MANUAL =====
     function toggleHabit(idx) {
       if (today.closed) return;
+      if (today.boosted && today.boosted[idx]) { showToast('Esta tarea ya fue validada con BOOST'); return; }
       if (TASKS[idx].auto) return; // las automaticas no se tocan
       const wasChecked = today.checked[idx];
       today.checked[idx] = !wasChecked;
@@ -3642,6 +3785,165 @@
       });
     }
 
+    // ===== COFRE DIARIO Y MONEDAS BOOST =====
+    function previousDayFailedMinimum() {
+      const prev = spainNow();
+      prev.setDate(prev.getDate() - 1);
+      const prevKey = prev.getFullYear() + '-' + String(prev.getMonth() + 1).padStart(2, '0') + '-' + String(prev.getDate()).padStart(2, '0');
+      const rows = profile.monthLog || [];
+      const row = rows.slice().reverse().find(r => r.date === prevKey);
+      if (row) return (Number(row.habitsDone) || 0) < 2;
+      const hist = profile.history || [];
+      const h = hist.slice().reverse().find(r => r.date === prevKey);
+      if (h) return (Number(h.habits) || 0) < 2;
+      // Si ya existe historial pero falta el registro de ayer, se considera día sin actividad.
+      return hist.length > 0 && !!(hist[hist.length - 1].date && hist[hist.length - 1].date < prevKey);
+    }
+    function showDailyChest() {
+      const date = todayStr();
+      if (!profile.dailyChest || profile.dailyChest.date !== date) {
+        profile.dailyChest = { date: date, opened: false, outcome: null, multiplier: 1 };
+        saveProfile();
+      }
+      if (profile.dailyChest.opened) return;
+      const result = document.getElementById('chestResult');
+      const visual = document.getElementById('chestVisual');
+      result.classList.remove('show');
+      visual.classList.remove('opening', 'revealed');
+      const track = document.getElementById('rouletteTrack');
+      const pointer = document.getElementById('roulettePointer');
+      track.classList.remove('spinning', 'stopped');
+      track.querySelectorAll('.roulette-slot').forEach(slot => slot.classList.remove('selected'));
+      pointer.classList.remove('spinning', 'stopped');
+      pointer.style.transition = 'none';
+      pointer.style.transform = 'translateX(0px)';
+      requestAnimationFrame(() => { pointer.style.transition = ''; });
+      document.getElementById('rouletteCaption').textContent = 'RULETA DE LA SUERTE';
+      document.getElementById('chestIntro').textContent = previousDayFailedMinimum()
+        ? 'Ayer hiciste menos de 2 tareas: existe un 10% de probabilidad de que salga la calavera. También puedes conseguir XP extra, un Boost o nada.'
+        : 'La calavera está descartada: ayer cumpliste las 2 tareas mínimas. Puedes conseguir XP extra, un Boost o nada.';
+      document.getElementById('chestOpenBtn').disabled = false;
+      document.getElementById('chestOpenBtn').onclick = openDailyChest;
+      document.getElementById('chestOpenBtn').innerHTML = '&#128081; ABRIR COFRE';
+      document.getElementById('dailyChestModal').classList.add('show');
+    }
+    function openDailyChest() {
+      const chest = profile.dailyChest;
+      if (!chest || chest.date !== todayStr() || chest.opened) return;
+      const btn = document.getElementById('chestOpenBtn');
+      btn.disabled = true;
+      chest.opened = true;
+      chest.multiplier = 1;
+      const failedMinimum = previousDayFailedMinimum();
+      const roll = Math.random();
+      // La calavera solo puede aparecer tras un día con menos de 2 tareas, con un 10% de probabilidad.
+      if (failedMinimum && roll < 0.10) {
+        chest.outcome = 'skull';
+        profile.xp = (Number(profile.xp) || 0) - 50; // penalización explícita: puede dejar XP negativa
+        profile.chestDeaths = (Number(profile.chestDeaths) || 0) + 1;
+        const lastHist = profile.history && profile.history[profile.history.length - 1];
+        if (lastHist) lastHist.xp = profile.xp;
+        const lastRow = profile.monthLog && profile.monthLog[profile.monthLog.length - 1];
+        if (lastRow) { lastRow.xpTotal = profile.xp; lastRow.level = getLvIdx(profile.xp) + 1; }
+      } else if (roll < (failedMinimum ? 0.18 : 0.08)) {
+        // 8% de Boost en ambos casos; si hay riesgo de calavera, ocupa el tramo 10%-18%.
+        chest.outcome = 'boost';
+        profile.boostCoins = Math.max(0, Number(profile.boostCoins) || 0) + 1;
+      } else if (roll < (failedMinimum ? 0.50 : 0.40)) {
+        // 32% de multiplicador XP, tanto si ayer se cumplió el mínimo como si no.
+        chest.outcome = 'xp';
+        chest.multiplier = Math.round((1.05 + Math.random() * 0.15) * 100) / 100;
+      } else {
+        chest.outcome = 'nothing';
+      }
+      saveProfile();
+      const visual = document.getElementById('chestVisual');
+      const track = document.getElementById('rouletteTrack');
+      const pointer = document.getElementById('roulettePointer');
+      const rouletteCaption = document.getElementById('rouletteCaption');
+      const slots = Array.from(track.querySelectorAll('.roulette-slot'));
+      const targetIndex = chest.outcome === 'skull' ? 0 : chest.outcome === 'xp' ? 1 : chest.outcome === 'boost' ? 2 : 3;
+      const movePointerTo = (index, duration) => {
+        const trackRect = track.getBoundingClientRect();
+        const slotRect = slots[index].getBoundingClientRect();
+        const pointerWidth = pointer.getBoundingClientRect().width || 28;
+        const x = slotRect.left - trackRect.left + slotRect.width / 2 - pointerWidth / 2;
+        pointer.style.transition = 'transform ' + duration + 'ms cubic-bezier(.18,.72,.2,1)';
+        pointer.style.transform = 'translateX(' + Math.max(0, x) + 'px)';
+      };
+      visual.classList.add('opening');
+      track.classList.add('spinning'); pointer.classList.add('spinning');
+      rouletteCaption.textContent = '¡LA FLECHA ESTÁ BUSCANDO TU PREMIO!';
+      // La banda de premios permanece completamente quieta. Solo la flecha
+      // recorre las casillas, cada vez más despacio, hasta el resultado real.
+      pointer.style.transition = 'none';
+      movePointerTo(0, 1);
+      const spinPath = [1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, targetIndex];
+      const delays = [120, 130, 150, 170, 190, 220, 260, 300, 350, 410, 480, 560, 680];
+      let spinElapsed = 0;
+      spinPath.forEach((slotIndex, step) => {
+        spinElapsed += delays[step];
+        setTimeout(() => movePointerTo(slotIndex, delays[step]), spinElapsed);
+      });
+      sndReward();
+      setTimeout(() => {
+        pointer.classList.remove('spinning'); pointer.classList.add('stopped');
+        track.classList.remove('spinning'); track.classList.add('stopped');
+        slots.forEach((slot, i) => slot.classList.toggle('selected', i === targetIndex));
+        rouletteCaption.textContent = '¡PREMIO SELECCIONADO!';
+        visual.classList.remove('opening');
+        visual.classList.add('revealed');
+        const result = document.getElementById('chestResult');
+        const icon = document.getElementById('chestResultIcon');
+        const title = document.getElementById('chestResultTitle');
+        const desc = document.getElementById('chestResultText');
+        if (chest.outcome === 'skull') {
+          icon.textContent = '\u{1F480}'; title.textContent = 'TU PERSONAJE HA CAÍDO';
+          desc.textContent = 'Ayer hiciste menos de 2 tareas. Penalización: −50 XP. Tu experiencia puede quedar en negativo. Hoy puedes remontar.';
+          title.style.color = '#f87171';
+          playFail(); heroReact('sad', 3500);
+          spawnParticles(window.innerWidth / 2, window.innerHeight * .42, 'smoke');
+        } else if (chest.outcome === 'boost') {
+          icon.textContent = '\u{1F9E9}'; title.textContent = '¡HAS CONSEGUIDO UN BOOST!';
+          desc.textContent = 'Se ha añadido 1 comodín a tu saldo. Úsalo en una tarea que hayas intentado pero no completado.';
+          title.style.color = '#67e8f9';
+          rewardExplosion(); sndStreak();
+        } else if (chest.outcome === 'xp') {
+          icon.textContent = '\u{1F4B0}'; title.textContent = 'POTENCIADOR DE EXPERIENCIA';
+          desc.textContent = 'Multiplicador x' + chest.multiplier.toFixed(2) + '. Se aplicará a la XP de hoy si completas más de 1 tarea.';
+          title.style.color = '#fbbf24';
+          rewardExplosion(); sndLevelUp();
+        } else {
+          icon.textContent = '\u{1F4A8}'; title.textContent = 'EL COFRE ESTÁ VACÍO';
+          desc.textContent = 'Hoy no ha tocado premio. La próxima apertura vuelve a ser una oportunidad.';
+          title.style.color = '#c4b5fd';
+          sndTick();
+        }
+        result.classList.add('show');
+        btn.disabled = false;
+        btn.innerHTML = 'ENTRAR AL JUEGO';
+        btn.onclick = closeDailyChest;
+        render();
+      }, 4900);
+    }
+    function closeDailyChest() {
+      if (!profile.dailyChest || !profile.dailyChest.opened) return;
+      document.getElementById('dailyChestModal').classList.remove('show');
+      render();
+    }
+    function useBoost(idx) {
+      if (today.closed || today.checked[idx] || (Number(profile.boostCoins) || 0) < 1) return;
+      if (!confirm('¿Gastar 1 BOOST para validar "' + TASKS[idx].name + '"? Úsalo solo si has hecho un intento real.')) return;
+      if (!Array.isArray(today.boosted)) today.boosted = new Array(N_TASKS).fill(false);
+      today.checked[idx] = true;
+      today.boosted[idx] = true;
+      profile.boostCoins = Math.max(0, Number(profile.boostCoins) || 0) - 1;
+      saveDay(today); saveProfile();
+      sndReward(); heroReact('victory', 1800);
+      showToast('\u26A1 BOOST gastado: tarea validada excepcionalmente');
+      checkQuest(true); render();
+    }
+
     // ===== RENDER TAREAS =====
     function fmtTime(sec) {
       const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60);
@@ -3654,17 +3956,29 @@
         const autoCls = t.auto ? ' auto' : '';
         const flag = t.auto ? '<span class="auto-flag">\u26A1 AUTO</span>' : '';
         const click = t.auto ? '' : ' onclick="toggleHabit(' + i + ')"';
-        return '<button class="hbtn' + autoCls + '" id="hb' + i + '"' + click + '>' + flag +
+        return '<div class="task-row"><button class="hbtn' + autoCls + '" id="hb' + i + '"' + click + '>' + flag +
           '<span style="font-size:24px;">' + t.icon + '</span>' +
           '<div style="flex:1;"><div style="font-size:15px;font-weight:700;">' + t.name + '</div>' +
           '<div class="auto-sub" style="color:' + t.tint + ';" id="hsub' + i + '">' + t.sub + '</div></div>' +
-          '<span style="font-size:13px;min-width:32px;text-align:right;font-family:\'Orbitron\',monospace;" id="hcheck' + i + '">+' + t.xp + '</span></button>';
+          '<span style="font-size:13px;min-width:32px;text-align:right;font-family:\'Orbitron\',monospace;" id="hcheck' + i + '">+' + t.xp + '</span></button>' +
+          '<button class="boost-use" id="boostUse' + i + '" onclick="useBoost(' + i + ')">&#9889;<br>USAR<br>BOOST</button></div>';
       }).join('');
+    }
+    function renderBoostWallet() {
+      const wrap = document.getElementById('boostWallet');
+      if (!wrap) return;
+      const coins = Math.max(0, Number(profile.boostCoins) || 0);
+      wrap.innerHTML = '<div class="boost-wallet-icon">&#9889;</div>' +
+        '<div class="boost-wallet-copy"><b style="color:#a5f3fc;">BOOST</b><br>' +
+        (coins > 0 ? 'Tienes comodines. Úsalos solo en tareas que hayas intentado.' : 'Sin comodines. Pueden salir en el cofre diario (8%).') +
+        '</div><div class="boost-wallet-count">x' + coins + '</div>';
     }
     function renderTasks() {
       const locked = today.closed;
+      const coins = Math.max(0, Number(profile.boostCoins) || 0);
       TASKS.forEach((t, i) => {
         const btn = document.getElementById('hb' + i), lbl = document.getElementById('hcheck' + i), sub = document.getElementById('hsub' + i);
+        const boostBtn = document.getElementById('boostUse' + i);
         if (!btn) return;
         const c = today.checked[i];
         btn.style.background = c ? t.bg : 'rgba(255,255,255,.03)';
@@ -3679,7 +3993,10 @@
           if (st === null) sub.textContent = t.sub + ' \u00B7 sin datos a\u00FAn';
           else sub.textContent = t.sub;
         }
+        if (today.boosted && today.boosted[i]) sub.textContent += ' · validada con BOOST';
+        if (boostBtn) boostBtn.style.display = (!locked && coins > 0 && !c) ? 'block' : 'none';
       });
+      renderBoostWallet();
     }
 
     // ===== RENDER SALUD =====
@@ -3754,7 +4071,7 @@
     function render() {
       const lvIdx = getLvIdx(profile.xp), lv = LEVELS[lvIdx];
       const nextXP = getNextXP(profile.xp), prevXP = LEVELS[lvIdx].min;
-      const pct = Math.min(100, nextXP > prevXP ? Math.round(((profile.xp - prevXP) / (nextXP - prevXP)) * 100) : 100);
+      const pct = Math.max(0, Math.min(100, nextXP > prevXP ? Math.round(((profile.xp - prevXP) / (nextXP - prevXP)) * 100) : 100));
       document.getElementById('levelLabel').textContent = 'NIVEL ' + (lvIdx + 1);
       const badge = document.getElementById('heroBadge');
       badge.textContent = lv.name; badge.style.background = lv.bg; badge.style.color = lv.tc; badge.style.border = '1px solid ' + lv.tc + '55';
@@ -3765,9 +4082,9 @@
       document.getElementById('statInt').textContent = 'INT ' + profile.stats[1];
       document.getElementById('statFoc').textContent = 'FOC ' + profile.stats[2];
       document.getElementById('statDis').textContent = 'DIS ' + profile.stats[3];
-      const { net, bonus } = calcNeto();
+      const { net, bonus, multiplier } = calcNeto();
       const xpEl = document.getElementById('todayXP');
-      xpEl.textContent = (net >= 0 ? '+' : '') + net + (bonus > 0 ? ' (racha +' + bonus + '%)' : '');
+      xpEl.textContent = (net >= 0 ? '+' : '') + net + (bonus > 0 ? ' (racha +' + bonus + '%)' : '') + (multiplier > 1 ? ' (cofre x' + multiplier.toFixed(2) + ')' : '');
       xpEl.style.color = net >= 0 ? '#a78bfa' : '#ef4444';
       const commitBtn = document.getElementById('commitBtn');
       commitBtn.disabled = today.closed;
@@ -3826,7 +4143,7 @@
       const taskNames = TASKS.map(t => t.name.replace(/\s+/g, ' ').trim());
       const header = ['Dia', 'Fecha', 'Mes', 'Habitos_completados', 'Total_tareas']
         .concat(taskNames)
-        .concat(['XP_neto_dia', 'XP_ganada', 'Penalizacion', 'Bonus_mision', 'Bonus_racha_%',
+        .concat(['XP_neto_dia', 'XP_ganada', 'Penalizacion', 'Bonus_mision', 'Bonus_racha_%', 'Multiplicador_cofre',
           'XP_total', 'Nivel', 'Racha', 'Estudio_min', 'Arboles',
           'Pasos', 'Sueno_h', 'Pantalla_h', 'FUE', 'INT', 'FOC', 'DIS']);
       const lines = [header.map(csvEscape).join(',')];
@@ -3835,7 +4152,7 @@
         while (checks.length < TASKS.length) checks.push('');
         const line = [r.dayNum, r.date, Math.ceil(r.dayNum / 30), r.habitsDone, r.totalTasks]
           .concat(checks.slice(0, TASKS.length))
-          .concat([r.net, r.earned, r.penalty, r.questBonus, r.streakBonus,
+          .concat([r.net, r.earned, r.penalty, r.questBonus, r.streakBonus, r.xpMultiplier || 1,
             r.xpTotal, r.level, r.streak, r.studyMin, r.trees,
             r.pasos, r.sueno, r.pantalla, r.fue, r.int, r.foc, r.dis]);
         lines.push(line.map(csvEscape).join(','));
@@ -5399,6 +5716,12 @@
 
     /* ===== BOOT ===== */
     profile = loadProfile();
+    // Compatibilidad con perfiles creados antes del sistema de decadencia.
+    if (!Array.isArray(profile.statIdleDays) || profile.statIdleDays.length !== 4) {
+      profile.statIdleDays = [0, 0, 0, 0];
+    } else {
+      profile.statIdleDays = profile.statIdleDays.map(v => Math.max(0, Math.floor(Number(v) || 0)));
+    }
     // backfill: si hay historial pero el log mensual esta vacio (usuarios previos),
     // reconstruimos filas basicas desde el historial para no perder esos dias en el CSV
     if ((!profile.monthLog || !profile.monthLog.length) && profile.history && profile.history.length) {
@@ -5448,6 +5771,7 @@
 
     buildTaskList();
     render();
+    setTimeout(showDailyChest, 650);
     if (_bootClosed) setTimeout(() => showToast('\uD83C\uDF05 Dia anterior cerrado autom\u00E1ticamente'), 900);
 
     // si quedo un CSV mensual pendiente (cierre automatico), ofrecerlo
