@@ -2516,15 +2516,41 @@
       return _audioCtx;
     }
 
+    // iOS 16.4+: pedir sesion de audio "playback" => suena aunque el interruptor de silencio este activado
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { }
+
+    // <audio> silencioso creado por JS (antes no existia en el HTML, por eso en iPhone no sonaba)
+    function getSilentEl() {
+      let el = document.getElementById('silentAudio');
+      if (el) return el;
+      // WAV de 0.5s, mono 8kHz, 16 bit, con ruido inaudible (+-1)
+      const n = 4000, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+      const W = (o, t) => { for (let i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
+      W(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); W(8, 'WAVE'); W(12, 'fmt ');
+      v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+      v.setUint32(24, 8000, true); v.setUint32(28, 16000, true); v.setUint16(32, 2, true);
+      v.setUint16(34, 16, true); W(36, 'data'); v.setUint32(40, n * 2, true);
+      for (let i = 0; i < n; i++) v.setInt16(44 + i * 2, i % 2 ? 1 : -1, true);
+      el = document.createElement('audio');
+      el.id = 'silentAudio';
+      el.src = URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+      el.loop = true;
+      el.preload = 'auto';
+      el.setAttribute('playsinline', '');
+      el.setAttribute('webkit-playsinline', '');
+      el.style.display = 'none';
+      document.body.appendChild(el);
+      return el;
+    }
+
     // Reproduce el <audio> silencioso para "destrabar" Web Audio bajo mute switch
     function kickSilent() {
-      const el = document.getElementById('silentAudio');
-      if (!el) return;
       try {
-        el.volume = 0.001;
+        const el = getSilentEl();
+        el.volume = 0.01;
         const p = el.play();
-        if (p && p.catch) p.catch(() => { });
-        _silentKicked = true;
+        if (p && p.then) p.then(() => { _silentKicked = true; }).catch(() => { _silentKicked = false; });
+        else _silentKicked = true;
       } catch (e) { }
     }
 
@@ -2536,7 +2562,7 @@
         const r = ctx.resume && ctx.resume();
         if (r && r.then) r.then(() => { }).catch(() => { });
       }
-      if (!_silentKicked) kickSilent();
+      { const se = document.getElementById('silentAudio'); if (!_silentKicked || (se && se.paused)) kickSilent(); }
       // ping inaudible para terminar de desbloquear en el primer gesto
       if (!_audioReady) {
         try {
@@ -2593,9 +2619,15 @@
     // nota con envolvente ADSR-ish y opcion de glide y vibrato
     function playNote(freq, dur, type, vol, when, opts) {
       const ctx = getAudioCtx();
-      if (!ctx || ctx.state !== 'running') return;
+      if (!ctx) return;
+      if (ctx.state !== 'running') {
+        // iOS: resume() es asincrono; reintentar la nota cuando ya este activo
+        const r = ctx.resume && ctx.resume();
+        if (r && r.then) r.then(() => { if (ctx.state === 'running') playNote(freq, dur, type, vol, when ? when - 0 : 0, opts); }).catch(() => { });
+        return;
+      }
       opts = opts || {};
-      const t = (when || ctx.currentTime);
+      const t = Math.max(when || 0, ctx.currentTime);
       const osc = ctx.createOscillator();
       const g = ctx.createGain();
       osc.type = type || 'triangle';
@@ -2627,8 +2659,13 @@
     // arpegio: notas en secuencia (cada una con su retardo en segundos)
     function playArp(freqs, step = 0.06, dur = 0.18, type = 'triangle', vol = 0.12, opts) {
       const ctx = getAudioCtx();
-      if (!ctx || ctx.state !== 'running') { ensureAudio(); }
-      if (!ctx || ctx.state !== 'running') return;
+      if (!ctx) return;
+      if (ctx.state !== 'running') {
+        ensureAudio();
+        const r = ctx.resume && ctx.resume();
+        if (r && r.then) r.then(() => { if (ctx.state === 'running') playArp(freqs, step, dur, type, vol, opts); }).catch(() => { });
+        return;
+      }
       const t0 = ctx.currentTime;
       freqs.forEach((f, i) => playNote(f, dur, type, vol, t0 + i * step, opts));
     }
