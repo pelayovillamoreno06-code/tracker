@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport"
-    content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+    content="width=device-width,initial-scale=1.0,viewport-fit=cover,user-scalable=no,maximum-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Habitos RPG">
@@ -1981,32 +1981,25 @@
     @keyframes chestRewardPop { 0%{transform:scale(.2) rotate(-25deg);filter:brightness(2)} 65%{transform:scale(1.25) rotate(8deg)} 100%{transform:scale(1) rotate(0);filter:brightness(1)} }
     .chest-stage:before { content:''; position:absolute; width:190px; height:190px; border-radius:50%; border:1px dashed rgba(250,204,21,.18); animation: chestOrbit 8s linear infinite; }
     @keyframes chestOrbit { to { transform:rotate(360deg); } }
-    /* Ruleta horizontal: los premios permanecen fijos y SOLO se desplaza la flecha */
-    .roulette-stage { position:relative; height:142px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; margin:2px auto 4px; }
-    .roulette-caption { color:#fcd34d; font:900 9px 'Orbitron',monospace; letter-spacing:2px; margin:0 0 25px; text-shadow:0 0 12px rgba(251,191,36,.45); }
-    .roulette-wrap { position:relative; width:min(360px, calc(100vw - 66px)); padding-top:0; }
-    .roulette-track { position:relative; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:5px; width:100%; padding:9px; border-radius:15px;
-      border:2px solid #dcae48; background:linear-gradient(180deg,#20153e,#100b25); box-shadow:0 0 0 3px rgba(113,59,31,.65),0 0 22px rgba(250,204,21,.22),inset 0 1px rgba(255,255,255,.12); }
-    .roulette-slot { min-width:0; height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; border-radius:9px;
-      border:1px solid rgba(255,255,255,.16); background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.025)); transition:filter .25s,box-shadow .25s,border-color .25s; }
-    .roulette-slot-icon { font-size:23px; line-height:1; filter:drop-shadow(0 2px 3px #000); }
-    .roulette-slot-label { color:#e9ddff; font:900 8px 'Orbitron',monospace; letter-spacing:.3px; white-space:nowrap; }
-    .roulette-slot.skull { background:linear-gradient(180deg,rgba(127,29,29,.42),rgba(69,10,10,.28)); }
-    .roulette-slot.xp { background:linear-gradient(180deg,rgba(161,98,7,.4),rgba(92,53,4,.25)); }
-    .roulette-slot.boost { background:linear-gradient(180deg,rgba(8,126,139,.42),rgba(8,65,80,.25)); }
-    .roulette-slot.nothing { background:linear-gradient(180deg,rgba(71,55,105,.45),rgba(35,27,59,.3)); }
-    .roulette-slot.selected { border-color:#fff0a6; box-shadow:inset 0 0 0 1px #fcd34d,0 0 17px rgba(250,204,21,.65); filter:brightness(1.45); }
-    .roulette-pointer { position:absolute; z-index:5; top:-25px; left:0; width:28px; height:23px; line-height:22px; text-align:center; color:#fff0a6; font-size:25px;
-      filter:drop-shadow(0 2px 3px #000) drop-shadow(0 0 7px #f59e0b); transform:translateX(0); transition:transform .15s ease-in-out; will-change:transform; pointer-events:none; }
-    .roulette-pointer.spinning { filter:drop-shadow(0 2px 3px #000) drop-shadow(0 0 11px #fbbf24) brightness(1.2); }
-    .roulette-pointer.stopped { filter:drop-shadow(0 2px 3px #000) drop-shadow(0 0 14px #fbbf24) brightness(1.4); }
-    @media(max-width:380px) { .roulette-wrap{width:calc(100vw - 58px)} .roulette-slot{height:66px} .roulette-slot-icon{font-size:20px} .roulette-slot-label{font-size:7px} }
-    @media(prefers-reduced-motion:reduce){.roulette-pointer{transition-duration:.08s}.roulette-slot{transition:none}}
     #chestResultIcon { font-size:42px; line-height:1.2; }
     #chestResultTitle { margin-top:5px; font:900 16px 'Orbitron',monospace; color:#fef3c7; }
     #chestResultText { margin:6px auto 0; max-width:330px; font:600 15px 'Rajdhani',sans-serif; color:rgba(235,228,255,.82); }
     #chestOpenBtn { width:min(310px,100%); margin-top:8px; background:linear-gradient(135deg,#f59e0b,#d97706); color:#241304; font:900 12px 'Orbitron',monospace; letter-spacing:1px; box-shadow:0 0 26px rgba(245,158,11,.35); }
     #chestOpenBtn:disabled { opacity:.55; }
+    /* Ruleta casino del cofre */
+    .roulette-stage { display:none; width:min(300px,82vw); margin:8px auto 12px; text-align:center; }
+    .roulette-stage.show { display:block; animation: rouletteAppear .45s ease both; }
+    @keyframes rouletteAppear { from{opacity:0;transform:translateY(12px) scale(.88)} to{opacity:1;transform:translateY(0) scale(1)} }
+    .roulette-wheel-wrap { position:relative; width:230px; height:230px; max-width:72vw; max-height:72vw; margin:0 auto; border-radius:50%; padding:8px; background:linear-gradient(145deg,#fef3c7,#b7791f 35%,#713f12 70%,#facc15); box-shadow:0 0 28px rgba(250,204,21,.35), inset 0 0 0 2px rgba(255,255,255,.3); }
+    .roulette-wheel { position:relative; width:100%; height:100%; border-radius:50%; border:3px solid #fef3c7; background:conic-gradient(from 0deg,#7f1d1d 0 10%,#0891b2 10% 18%,#b45309 18% 50%,#312e81 50% 100%); box-shadow:inset 0 0 0 3px rgba(255,255,255,.18), inset 0 0 22px rgba(0,0,0,.45); }
+    .roulette-wheel:after { content:''; position:absolute; inset:42%; border-radius:50%; background:radial-gradient(circle,#fff7cc,#b7791f 65%,#713f12); border:3px solid #fff1b2; box-shadow:0 0 12px #facc15; }
+    .roulette-needle { position:absolute; z-index:4; left:50%; top:50%; width:5px; height:46%; border-radius:8px; background:linear-gradient(90deg,#fff7cc,#facc15,#92400e); transform-origin:50% 100%; transform:translate(-50%,-100%) rotate(0deg); transition:transform 3.65s cubic-bezier(.08,.78,.12,1); filter:drop-shadow(0 0 5px rgba(255,230,120,.9)); }
+    .roulette-needle:before { content:''; position:absolute; top:-10px; left:50%; transform:translateX(-50%); width:0;height:0; border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:20px solid #fff1a8; filter:drop-shadow(0 0 4px #facc15); }
+    .roulette-hub { position:absolute; z-index:5; left:50%;top:50%;width:20px;height:20px;transform:translate(-50%,-50%);border-radius:50%; background:radial-gradient(circle at 35% 30%,#fff,#facc15 45%,#92400e);border:2px solid #fff2b5;box-shadow:0 0 12px #facc15; }
+    .roulette-legend { display:flex; flex-wrap:wrap; justify-content:center; gap:5px; margin-top:11px; }
+    .roulette-chip { padding:5px 7px; border-radius:8px; font:800 9px 'Orbitron',monospace; color:#f5eaff; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.13); }
+    .roulette-caption { margin-top:8px; font:900 10px 'Orbitron',monospace; letter-spacing:2px; color:#fcd34d; animation:roulettePulse .8s ease-in-out infinite alternate; }
+    @keyframes roulettePulse { to{opacity:.55;text-shadow:0 0 12px #facc15} }
     .boost-wallet { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:13px; border:1px solid rgba(56,189,248,.28); background:linear-gradient(110deg,rgba(8,145,178,.13),rgba(139,92,246,.1)); }
     .boost-wallet-icon { font-size:22px; }
     .boost-wallet-copy { flex:1; min-width:0; font:600 12px 'Rajdhani',sans-serif; color:rgba(220,240,255,.75); line-height:1.25; }
@@ -2017,56 +2010,6 @@
       font:900 9px 'Orbitron',monospace; letter-spacing:.2px; padding:6px; line-height:1.3; cursor:pointer; touch-action:manipulation; }
     .boost-use:disabled { opacity:.35; cursor:default; }
     @media (max-width:380px) { .boost-use { flex-basis:70px; font-size:8px; } .daily-chest-card { padding:22px 14px 18px; } }
-    @media (max-width:600px) {
-      #dailyChestModal {
-        align-items: flex-start;
-        justify-content: center;
-        padding: max(12px, env(safe-area-inset-top)) 10px max(12px, env(safe-area-inset-bottom));
-        min-height: 100vh;
-        min-height: 100dvh;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
-      }
-      .daily-chest-card {
-        width: 100%;
-        max-width: 430px;
-        max-height: calc(100vh - 24px);
-        max-height: calc(100dvh - max(24px, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        -webkit-overflow-scrolling: touch;
-        padding: 18px 12px 16px;
-        border-radius: 20px;
-      }
-      .daily-chest-kicker { font-size: 9px; letter-spacing: 2px; }
-      .daily-chest-title { font-size: clamp(17px, 5vw, 20px); }
-      .daily-chest-sub { font-size: 14px; max-width: 290px; }
-      .chest-stage { height: 145px; margin: 4px auto 0; }
-      .chest-stage:before { width: 145px; height: 145px; }
-      .chest-visual { transform: scale(.86); }
-      .roulette-stage { height: 125px; margin-top: 0; }
-      .roulette-caption { font-size: 8px; letter-spacing: 1.3px; margin-bottom: 23px; }
-      .roulette-wrap { width: 100%; }
-      .roulette-track { gap: 3px; padding: 6px; border-radius: 12px; }
-      .roulette-slot { height: 64px; gap: 4px; }
-      .roulette-slot-icon { font-size: clamp(17px, 5vw, 21px); }
-      .roulette-slot-label { font-size: clamp(6px, 1.8vw, 8px); letter-spacing: 0; }
-      .roulette-pointer { top: -23px; }
-      #chestResult { min-height: 62px; margin: 5px auto 8px; }
-      #chestResultIcon { font-size: 36px; }
-      #chestResultTitle { font-size: 14px; }
-      #chestResultText { font-size: 14px; line-height: 1.3; }
-      #chestOpenBtn { min-height: 48px; width: 100%; font-size: 11px; touch-action: manipulation; }
-    }
-    @media (max-height:700px) and (max-width:600px) {
-      #dailyChestModal { align-items: flex-start; }
-      .daily-chest-card { padding-top: 12px; padding-bottom: 12px; }
-      .chest-stage { height: 112px; }
-      .chest-stage:before { width: 112px; height: 112px; }
-      .chest-visual { transform: scale(.72); }
-      .roulette-stage { height: 112px; }
-      #chestResult { min-height: 48px; }
-    }
 
   </style>
 </head>
@@ -2095,17 +2038,9 @@
         <div class="chest-visual" id="chestVisual"><div class="chest-glow"></div><div class="chest-lid"></div><div class="chest-box"></div><div class="chest-lock"></div></div>
         <div class="chest-sparkles" aria-hidden="true">&#10024; &#11088; &#128165; &#10024;</div>
       </div>
-      <div class="roulette-stage" aria-label="Ruleta horizontal de premios">
-        <div class="roulette-caption" id="rouletteCaption">RULETA DE LA SUERTE</div>
-        <div class="roulette-wrap">
-          <div class="roulette-pointer" id="roulettePointer" aria-hidden="true">▼</div>
-          <div class="roulette-track" id="rouletteTrack" aria-hidden="true">
-            <div class="roulette-slot skull"><span class="roulette-slot-icon">💀</span><span class="roulette-slot-label">CALAVERA</span></div>
-            <div class="roulette-slot xp"><span class="roulette-slot-icon">✨</span><span class="roulette-slot-label">XP EXTRA</span></div>
-            <div class="roulette-slot boost"><span class="roulette-slot-icon">🪙</span><span class="roulette-slot-label">BOOST</span></div>
-            <div class="roulette-slot nothing"><span class="roulette-slot-icon">💨</span><span class="roulette-slot-label">NADA</span></div>
-          </div>
-        </div>
+      <div class="roulette-stage" id="rouletteStage" aria-live="polite">
+        <div class="roulette-wheel-wrap"><div class="roulette-wheel" id="rouletteWheel"></div><div class="roulette-needle" id="rouletteNeedle"></div><div class="roulette-hub"></div></div>
+        <div class="roulette-caption" id="rouletteCaption">¡LA SUERTE ESTÁ GIRANDO!</div><div class="roulette-legend" id="rouletteLegend"></div>
       </div>
       <div id="chestResult"><div id="chestResultIcon"></div><div id="chestResultTitle"></div><div id="chestResultText"></div></div>
       <button class="btn" id="chestOpenBtn" onclick="openDailyChest()">&#128081; ABRIR COFRE</button>
@@ -2516,14 +2451,13 @@
       return _audioCtx;
     }
 
-    // iOS 16.4+: pedir sesion de audio "playback" => suena aunque el interruptor de silencio este activado
+    // iOS 16.4+: sesion de audio "playback" => suena aunque el interruptor de silencio este activado
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { }
 
     // <audio> silencioso creado por JS (antes no existia en el HTML, por eso en iPhone no sonaba)
     function getSilentEl() {
       let el = document.getElementById('silentAudio');
       if (el) return el;
-      // WAV de 0.5s, mono 8kHz, 16 bit, con ruido inaudible (+-1)
       const n = 4000, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
       const W = (o, t) => { for (let i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
       W(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); W(8, 'WAVE'); W(12, 'fmt ');
@@ -2596,25 +2530,6 @@
       b.style.display = on ? 'none' : 'block';
     }
 
-    // Desbloqueo global exclusivo para iPhone/iPad: cualquier toque
-    // en la pantalla intenta activar o reanudar el audio.
-    (function installGlobalAudioUnlock() {
-      const isAppleMobile = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
-        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      if (!isAppleMobile) return;
-      let lastUnlockAt = 0;
-      const unlockFromGesture = () => {
-        const now = Date.now();
-        // Evita ejecutar varias veces por el mismo toque.
-        if (now - lastUnlockAt < 350) return;
-        lastUnlockAt = now;
-        ensureAudio();
-      };
-      document.addEventListener('touchend', unlockFromGesture, { capture: true, passive: true });
-      document.addEventListener('pointerup', unlockFromGesture, { capture: true, passive: true });
-      document.addEventListener('click', unlockFromGesture, { capture: true, passive: true });
-    })();
-
     // ---- síntesis ----
     // nota con envolvente ADSR-ish y opcion de glide y vibrato
     function playNote(freq, dur, type, vol, when, opts) {
@@ -2623,7 +2538,7 @@
       if (ctx.state !== 'running') {
         // iOS: resume() es asincrono; reintentar la nota cuando ya este activo
         const r = ctx.resume && ctx.resume();
-        if (r && r.then) r.then(() => { if (ctx.state === 'running') playNote(freq, dur, type, vol, when ? when - 0 : 0, opts); }).catch(() => { });
+        if (r && r.then) r.then(() => { if (ctx.state === 'running') playNote(freq, dur, type, vol, when, opts); }).catch(() => { });
         return;
       }
       opts = opts || {};
@@ -3380,9 +3295,8 @@
           profile.stats[statIdx] = Math.min(99, profile.stats[statIdx] + 1);
         });
       });
-      // Descanso protegido: tras completar una tarea relacionada, el primer dia sin ella
-      // no penaliza. Si tambien pasa el segundo dia sin actividad, baja 1 punto;
-      // despues la decadencia continua cada 4 dias. Una tarea relacionada reinicia el contador.
+      // Decadencia gradual: 3 dias de margen; baja 1 punto al 4º dia sin actividad
+      // y despues otro punto cada 4 dias. Una tarea relacionada reinicia ese contador.
       if (!Array.isArray(profile.statIdleDays) || profile.statIdleDays.length !== 4) {
         profile.statIdleDays = [0, 0, 0, 0];
       }
@@ -3392,7 +3306,7 @@
         } else {
           profile.statIdleDays[statIdx] = Math.max(0, Number(profile.statIdleDays[statIdx]) || 0) + 1;
           const idleDays = profile.statIdleDays[statIdx];
-          if (idleDays >= 2 && (idleDays - 2) % 4 === 0) {
+          if (idleDays >= 4 && (idleDays - 4) % 4 === 0) {
             profile.stats[statIdx] = Math.max(1, profile.stats[statIdx] - 1);
           }
         }
@@ -3874,7 +3788,7 @@
       const labels = hist.length ? hist.map((_, i) => 'D' + (i + 1)) : ['inicio'];
       const xpData = hist.length ? hist.map(h => h.xp) : [0];
       const lvData = hist.length ? hist.map(h => getLvIdx(h.xp)) : [0];
-      const bc = xpData.map((v, i) => i === 0 ? 'rgba(139,92,246,.7)' : v < xpData[i - 1] ? 'rgba(239,68,68,.7)' : 'rgba(139,92,246,.7)');
+      const bc = xpData.map(v => v < 0 ? 'rgba(239,68,68,.7)' : 'rgba(139,92,246,.7)');
       chart = new Chart(cvs, {
         type: 'bar', data: {
           labels, datasets: [
@@ -3916,15 +3830,11 @@
       const visual = document.getElementById('chestVisual');
       result.classList.remove('show');
       visual.classList.remove('opening', 'revealed');
-      const track = document.getElementById('rouletteTrack');
-      const pointer = document.getElementById('roulettePointer');
-      track.classList.remove('spinning', 'stopped');
-      track.querySelectorAll('.roulette-slot').forEach(slot => slot.classList.remove('selected'));
-      pointer.classList.remove('spinning', 'stopped');
-      pointer.style.transition = 'none';
-      pointer.style.transform = 'translateX(0px)';
-      requestAnimationFrame(() => { pointer.style.transition = ''; });
-      document.getElementById('rouletteCaption').textContent = 'RULETA DE LA SUERTE';
+      document.querySelector('.chest-stage').style.display = 'flex';
+      const roulette = document.getElementById('rouletteStage');
+      roulette.classList.remove('show');
+      document.getElementById('rouletteNeedle').style.transition = 'none';
+      document.getElementById('rouletteNeedle').style.transform = 'translate(-50%,-100%) rotate(0deg)';
       document.getElementById('chestIntro').textContent = previousDayFailedMinimum()
         ? 'Ayer hiciste menos de 2 tareas: existe un 10% de probabilidad de que salga la calavera. También puedes conseguir XP extra, un Boost o nada.'
         : 'La calavera está descartada: ayer cumpliste las 2 tareas mínimas. Puedes conseguir XP extra, un Boost o nada.';
@@ -3964,73 +3874,54 @@
       }
       saveProfile();
       const visual = document.getElementById('chestVisual');
-      const track = document.getElementById('rouletteTrack');
-      const pointer = document.getElementById('roulettePointer');
-      const rouletteCaption = document.getElementById('rouletteCaption');
-      const slots = Array.from(track.querySelectorAll('.roulette-slot'));
-      const targetIndex = chest.outcome === 'skull' ? 0 : chest.outcome === 'xp' ? 1 : chest.outcome === 'boost' ? 2 : 3;
-      const movePointerTo = (index, duration) => {
-        const trackRect = track.getBoundingClientRect();
-        const slotRect = slots[index].getBoundingClientRect();
-        const pointerWidth = pointer.getBoundingClientRect().width || 28;
-        const x = slotRect.left - trackRect.left + slotRect.width / 2 - pointerWidth / 2;
-        pointer.style.transition = 'transform ' + duration + 'ms cubic-bezier(.18,.72,.2,1)';
-        pointer.style.transform = 'translateX(' + Math.max(0, x) + 'px)';
-      };
+      const chestStage = document.querySelector('.chest-stage');
+      const roulette = document.getElementById('rouletteStage');
+      const wheel = document.getElementById('rouletteWheel');
+      const needle = document.getElementById('rouletteNeedle');
+      const legend = document.getElementById('rouletteLegend');
+      const caption = document.getElementById('rouletteCaption');
       visual.classList.add('opening');
-      track.classList.add('spinning'); pointer.classList.add('spinning');
-      rouletteCaption.textContent = '¡LA FLECHA ESTÁ BUSCANDO TU PREMIO!';
-      // La banda de premios permanece completamente quieta. Solo la flecha
-      // recorre las casillas, cada vez más despacio, hasta el resultado real.
-      pointer.style.transition = 'none';
-      movePointerTo(0, 1);
-      const spinPath = [1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, targetIndex];
-      const delays = [120, 130, 150, 170, 190, 220, 260, 300, 350, 410, 480, 560, 680];
-      let spinElapsed = 0;
-      spinPath.forEach((slotIndex, step) => {
-        spinElapsed += delays[step];
-        setTimeout(() => movePointerTo(slotIndex, delays[step]), spinElapsed);
-      });
       sndReward();
-      setTimeout(() => {
-        pointer.classList.remove('spinning'); pointer.classList.add('stopped');
-        track.classList.remove('spinning'); track.classList.add('stopped');
-        slots.forEach((slot, i) => slot.classList.toggle('selected', i === targetIndex));
-        rouletteCaption.textContent = '¡PREMIO SELECCIONADO!';
-        visual.classList.remove('opening');
-        visual.classList.add('revealed');
-        const result = document.getElementById('chestResult');
-        const icon = document.getElementById('chestResultIcon');
-        const title = document.getElementById('chestResultTitle');
-        const desc = document.getElementById('chestResultText');
-        if (chest.outcome === 'skull') {
-          icon.textContent = '\u{1F480}'; title.textContent = 'TU PERSONAJE HA CAÍDO';
-          desc.textContent = 'Ayer hiciste menos de 2 tareas. Penalización: −50 XP. Tu experiencia puede quedar en negativo. Hoy puedes remontar.';
-          title.style.color = '#f87171';
-          playFail(); heroReact('sad', 3500);
-          spawnParticles(window.innerWidth / 2, window.innerHeight * .42, 'smoke');
-        } else if (chest.outcome === 'boost') {
-          icon.textContent = '\u{1F9E9}'; title.textContent = '¡HAS CONSEGUIDO UN BOOST!';
-          desc.textContent = 'Se ha añadido 1 comodín a tu saldo. Úsalo en una tarea que hayas intentado pero no completado.';
-          title.style.color = '#67e8f9';
-          rewardExplosion(); sndStreak();
-        } else if (chest.outcome === 'xp') {
-          icon.textContent = '\u{1F4B0}'; title.textContent = 'POTENCIADOR DE EXPERIENCIA';
-          desc.textContent = 'Multiplicador x' + chest.multiplier.toFixed(2) + '. Se aplicará a la XP de hoy si completas más de 1 tarea.';
-          title.style.color = '#fbbf24';
-          rewardExplosion(); sndLevelUp();
-        } else {
-          icon.textContent = '\u{1F4A8}'; title.textContent = 'EL COFRE ESTÁ VACÍO';
-          desc.textContent = 'Hoy no ha tocado premio. La próxima apertura vuelve a ser una oportunidad.';
-          title.style.color = '#c4b5fd';
-          sndTick();
-        }
-        result.classList.add('show');
-        btn.disabled = false;
-        btn.innerHTML = 'ENTRAR AL JUEGO';
-        btn.onclick = closeDailyChest;
-        render();
-      }, 4900);
+      const segments = failedMinimum
+        ? [{label:'💀 CALAVERA 10%',color:'#7f1d1d'},{label:'🧩 BOOST 8%',color:'#0891b2'},{label:'💰 XP 32%',color:'#b45309'},{label:'💨 NADA 50%',color:'#312e81'}]
+        : [{label:'🧩 BOOST 8%',color:'#0891b2'},{label:'💰 XP 32%',color:'#b45309'},{label:'💨 NADA 60%',color:'#312e81'}];
+      const stops = failedMinimum ? [10,8,32,50] : [8,32,60];
+      let acc=0; const gradient=[];
+      segments.forEach((seg,i)=>{const next=acc+stops[i];gradient.push(`${seg.color} ${acc}% ${next}%`);acc=next;});
+      wheel.style.background=`conic-gradient(from 0deg, ${gradient.join(',')})`;
+      legend.innerHTML=segments.map(seg=>`<span class="roulette-chip">${seg.label}</span>`).join('');
+      setTimeout(()=>{
+        visual.classList.remove('opening'); visual.classList.add('revealed');
+        chestStage.style.display='none'; roulette.classList.add('show'); caption.textContent='¡LA SUERTE ESTÁ GIRANDO!';
+        needle.style.transition='none'; needle.style.transform='translate(-50%,-100%) rotate(0deg)'; void needle.offsetWidth;
+        needle.style.transition='transform 3.65s cubic-bezier(.08,.78,.12,1)';
+        needle.style.transform=`translate(-50%,-100%) rotate(${1800+Math.round(roll*360)}deg)`;
+        setTimeout(()=>{
+          caption.textContent='¡RESULTADO!';
+          const result=document.getElementById('chestResult');
+          const icon=document.getElementById('chestResultIcon');
+          const title=document.getElementById('chestResultTitle');
+          const desc=document.getElementById('chestResultText');
+          if(chest.outcome==='skull'){
+            icon.textContent='💀'; title.textContent='TU PERSONAJE HA CAÍDO';
+            desc.textContent='Ayer hiciste menos de 2 tareas. Penalización: −50 XP. Tu experiencia puede quedar en negativo. Hoy puedes remontar.';
+            title.style.color='#f87171'; playFail(); heroReact('sad',3500); spawnParticles(window.innerWidth/2,window.innerHeight*.42,'smoke');
+          } else if(chest.outcome==='boost'){
+            icon.textContent='🧩'; title.textContent='¡HAS CONSEGUIDO UN BOOST!';
+            desc.textContent='Se ha añadido 1 comodín a tu saldo. Úsalo en una tarea que hayas intentado pero no completado.';
+            title.style.color='#67e8f9'; rewardExplosion(); sndStreak();
+          } else if(chest.outcome==='xp'){
+            icon.textContent='💰'; title.textContent='POTENCIADOR DE EXPERIENCIA';
+            desc.textContent='Multiplicador x'+chest.multiplier.toFixed(2)+'. Se aplicará a la XP de hoy si completas más de 1 tarea.';
+            title.style.color='#fbbf24'; rewardExplosion(); sndLevelUp();
+          } else {
+            icon.textContent='💨'; title.textContent='EL COFRE ESTÁ VACÍO';
+            desc.textContent='Hoy no ha tocado premio. La próxima apertura vuelve a ser una oportunidad.';
+            title.style.color='#c4b5fd'; sndTick();
+          }
+          result.classList.add('show'); btn.disabled=false; btn.innerHTML='ENTRAR AL JUEGO'; btn.onclick=closeDailyChest; render();
+        },3750);
+      },700);
     }
     function closeDailyChest() {
       if (!profile.dailyChest || !profile.dailyChest.opened) return;
